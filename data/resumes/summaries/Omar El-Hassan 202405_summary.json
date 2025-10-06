@@ -1,0 +1,25 @@
+{
+  "name": "Omar El-Hassan",
+  "current_title": "Intern",
+  "current_company": "Société Générale - SGATS (SGCIB)",
+  "years_experience": 1,
+  "sector_focus": [
+    "Financials"
+  ],
+  "investment_approach": "Quantitative",
+  "primary_geography": "Europe",
+  "summary_blurb": "Omar El-Hassan is a quantitative analyst with experience in developing trading strategies and implementing quantitative models. He has worked with notable institutions such as BNP Paribas and Société Générale. His educational background includes degrees in Financial Engineering and Quantitative Finance.",
+  "notable_experience": [
+    "BNP Paribas CIB",
+    "Société Générale - SGATS (SGCIB)"
+  ],
+  "top_skills": [
+    "C++",
+    "C#",
+    "Python",
+    "Machine Learning",
+    "Statistics"
+  ],
+  "education_highlight": "Master's degree in Quantitative Finance from Universite Lyon",
+  "certifications": []
+}

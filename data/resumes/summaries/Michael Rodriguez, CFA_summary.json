@@ -1,0 +1,33 @@
+{
+  "name": "Michael Rodriguez",
+  "current_title": "Analyst",
+  "current_company": "Fidelity Asset Management",
+  "years_experience": 4,
+  "sector_focus": [
+    "Technology",
+    "Consumer",
+    "Financials"
+  ],
+  "investment_approach": "Fundamental",
+  "primary_geography": "US",
+  "summary_blurb": "Michael Rodriguez is an Analyst at Fidelity Asset Management with a focus on the Technology and Consumer sectors. He has experience in fundamental analysis and has contributed to investment processes for mutual funds. His background includes roles in equity research and fixed income sales, providing a well-rounded perspective in financial markets.",
+  "notable_experience": [
+    "Fidelity Asset Management",
+    "William Blair, Equity Research",
+    "William Blair, Fixed Income Sales & Trading"
+  ],
+  "top_skills": [
+    "Bloomberg Terminal",
+    "Excel",
+    "Advanced Financial Modeling",
+    "Statistical Analysis",
+    "Hypothesis Testing"
+  ],
+  "education_highlight": "B.S. in Finance from University of Michigan, Ross School of Business",
+  "certifications": [
+    "CFA Charterholder",
+    "Series 7",
+    "Series 63",
+    "Series 87"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Chen Li",
+  "current_title": "Analyst",
+  "current_company": "Bank of China",
+  "years_experience": 2,
+  "sector_focus": [
+    "Technology",
+    "Healthcare"
+  ],
+  "investment_approach": "Quantitative",
+  "primary_geography": "Asia-Pacific",
+  "summary_blurb": "Chen Li is an Analyst with experience in quantitative analysis and investment strategies within the technology and healthcare sectors. He has developed multi-factor models and automated systems to enhance investment decision-making. His background includes comprehensive research and statistical analysis, supporting portfolio management in a buy-side environment.",
+  "notable_experience": [
+    "Bank of China"
+  ],
+  "top_skills": [
+    "Python",
+    "R",
+    "SQL",
+    "Microsoft Office Suite",
+    "Bloomberg Terminal"
+  ],
+  "education_highlight": "M.S. in Financial Technology from University of Hong Kong",
+  "certifications": []
+}

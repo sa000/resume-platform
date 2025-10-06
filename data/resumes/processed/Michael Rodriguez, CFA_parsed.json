@@ -1,0 +1,171 @@
+{
+  "name": "Michael Rodriguez",
+  "email": "mrodriguez84@gmail.com",
+  "phone": "+1 317.441.1999",
+  "location": "Boston, MA, US",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "B.S.",
+      "major": "Finance",
+      "school": "University of Michigan, Ross School of Business",
+      "start": null,
+      "end": "May-01-2017",
+      "honors": "GPA: 3.5/4.0"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Fidelity Asset Management",
+      "title": "Analyst, Consumer Internet & Software",
+      "start": "May-01-2022",
+      "end": null,
+      "sectors": [
+        "Technology",
+        "Consumer"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 20,
+      "num_sectors_covered": null,
+      "coverage_value": "$1-2B",
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "Valuation analysis"
+      ],
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Initiated on 20+ names across TMT sector through diligence on public filings, industry experts and valuation analysis",
+        "Contributed to weekly portfolio review committee and investment process meetings to determine equity allocation across $1-2 billion AUM mutual fund",
+        "Met directly with management teams as a part of investment process to assess corporate strategy & initiatives"
+      ]
+    },
+    {
+      "company": "William Blair, Equity Research",
+      "title": "Associate, TMT",
+      "start": "April-01-2019",
+      "end": "January-01-2022",
+      "sectors": [
+        "Technology"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Sell-side",
+      "num_companies_covered": 20,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "IPO syndicate models",
+        "Valuation metrics"
+      ],
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Covered 20+ names across TMT sector providing quarterly earnings estimates and research reports",
+        "Wrote coverage initiation reports and built IPO syndicate models from scratch on 10+ consumer internet companies",
+        "Built and updated models with earnings releases to prepare notes with adjusted forecasts and valuation metrics",
+        "Published a differentiated 70+ page report on 3D printing industry highlighting 29 competitors with extensive discussion of technology, products, pricing and financial performance; researched forward looking manufacturing trends"
+      ]
+    },
+    {
+      "company": "William Blair, Fixed Income Sales & Trading",
+      "title": "Jr. Desk Analyst",
+      "start": "April-01-2018",
+      "end": "April-01-2019",
+      "sectors": [
+        "Financials"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Sell-side",
+      "num_companies_covered": 10,
+      "num_sectors_covered": null,
+      "coverage_value": "$500M",
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "Three-statement valuation models"
+      ],
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Contributed fundamental research for clients on various HY, XO and IG credits as a junior desk analyst by building three-statement valuation models to pitch relative value ideas and drive desk revenue across coverage of 10+ names",
+        "Priced 100+ corporate bonds daily for inventory RUNZ on Bloomberg and ALLQ quoted markets",
+        "Responsible for odd lot market making in High yield, Investment Grade and Hybrid securities up to $500m"
+      ]
+    },
+    {
+      "company": "Guaranteed Rate, Mortgage Trading",
+      "title": "Capital Markets Analyst",
+      "start": "July-01-2017",
+      "end": "March-01-2018",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": [
+        "Excel",
+        "SQL"
+      ],
+      "bullet_points": [
+        "Managed mortgage origination pipeline for strategic lending partnership utilizing Excel, SQL and proprietary risk management systems to hedge interest rate exposure through MBS forward contracts"
+      ]
+    },
+    {
+      "company": "Magnetar Capital Management, Summer Intern",
+      "title": null,
+      "start": "May-01-2016",
+      "end": "August-01-2016",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Structured, pooled and delivered residential mortgage loans weekly exceeding $30M into agency and non-agency securitization products"
+      ]
+    }
+  ],
+  "skills": [
+    "Bloomberg Terminal",
+    "Excel",
+    "Advanced Financial Modeling",
+    "Statistical Analysis",
+    "Hypothesis Testing",
+    "FactSet",
+    "S&P Capital IQ"
+  ],
+  "certifications": [
+    "CFA Charterholder",
+    "Series 7",
+    "Series 63",
+    "Series 87"
+  ],
+  "languages": [],
+  "primary_sector": "Technology",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "US",
+  "current_level": "Analyst",
+  "years_experience": 4
+}

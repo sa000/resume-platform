@@ -1,0 +1,118 @@
+{
+  "name": "Omar El-Hassan",
+  "email": "o.elhassan15@gmail.com",
+  "phone": "+33678924531",
+  "location": "Paris, France, Europe",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "Diplôme d'Ingénieur",
+      "major": "Financial Engineering",
+      "school": "INSA Lyon",
+      "start": "Sep-01-2019",
+      "end": "Sep-01-2022",
+      "honors": null
+    },
+    {
+      "degree": "Master's degree",
+      "major": "Quantitative Finance",
+      "school": "Universite Lyon",
+      "start": "Sep-01-2021",
+      "end": "Sep-01-2022",
+      "honors": null
+    },
+    {
+      "degree": "null",
+      "major": "Mathematics and Physics",
+      "school": "École Royale Navale",
+      "start": "Sep-01-2017",
+      "end": "Jul-01-2019",
+      "honors": null
+    }
+  ],
+  "experiences": [
+    {
+      "company": "BNP Paribas CIB",
+      "title": "Quantitative Developer",
+      "start": "May-01-2022",
+      "end": null,
+      "sectors": [
+        "Financials"
+      ],
+      "approach": "Quantitative",
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Europe"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": [
+        "C++"
+      ],
+      "bullet_points": [
+        "Introduc�on of a new model (one factor Gaussian copula model)",
+        "Implement a new exo�c payoﬀ (local spread op�on)",
+        "Implementa�on of new features for trading desks (Scenario analysis, C++ Greeks computa�on, ...)"
+      ]
+    },
+    {
+      "company": "Société Générale - SGATS (SGCIB)",
+      "title": "Quantitative Strategist - Intern",
+      "start": "Jun-01-2021",
+      "end": "Aug-01-2021",
+      "sectors": [
+        "Financials"
+      ],
+      "approach": "Quantitative",
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Africa"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": [
+        "C#",
+        "Python"
+      ],
+      "bullet_points": [
+        "Development and back tes�ng of momentum-based trading strategies",
+        "Performance op�miza�on of yield curve construc�on algorithms"
+      ]
+    }
+  ],
+  "skills": [
+    "C++",
+    "C#",
+    "Python",
+    "Java",
+    "R",
+    "SQL",
+    "MongoDB",
+    "Machine Learning",
+    "Stochastic calculus",
+    "Probability theory",
+    "Monte Carlo pricer for european and american options",
+    "Statistics",
+    "Backtester application for a systematic strategy",
+    "Neural Network"
+  ],
+  "certifications": [],
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "primary_sector": "Financials",
+  "primary_strategy": "Quantitative",
+  "primary_geography": "Europe",
+  "current_level": "Intern",
+  "years_experience": 1
+}

@@ -1,0 +1,19 @@
+{
+  "candidate_name": "Chen Li",
+  "candidate_id": 3,
+  "timestamp": "2025-10-06T01:54:03.087510",
+  "total_issues": 2,
+  "issues_by_severity": {
+    "critical": 0,
+    "formatting": 2,
+    "warnings": 0
+  },
+  "issues": {
+    "critical": [],
+    "formatting": [
+      "Education #1: Invalid start date format 'Sept-01-2021' (expected MMM-DD-YYYY)",
+      "Education #2: Invalid start date format 'Sept-01-2017' (expected MMM-DD-YYYY)"
+    ],
+    "warnings": []
+  }
+}

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+.venv/
+venv/
+ENV/
+2025_ds_case_study_resume_platform.ipynb
+# Env
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data / Exports
+/exports/*
+!data/.gitkeep
+!exports/.gitkeep
+
+# IDEs
+.vscode/
+.idea/

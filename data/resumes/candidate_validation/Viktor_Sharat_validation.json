@@ -1,0 +1,37 @@
+{
+  "candidate_name": "Viktor Sharat",
+  "candidate_id": 2,
+  "timestamp": "2025-10-06T01:54:03.075727",
+  "total_issues": 18,
+  "issues_by_severity": {
+    "critical": 1,
+    "formatting": 16,
+    "warnings": 1
+  },
+  "issues": {
+    "critical": [
+      "Missing email address"
+    ],
+    "formatting": [
+      "Education #1: Invalid start date format '01-01-2015' (expected MMM-DD-YYYY)",
+      "Education #1: Invalid end date format '01-01-2015' (expected MMM-DD-YYYY)",
+      "Education #2: Invalid degree format 'M.Tech(Integrated)' (expected B.S., MBA, Ph.D., etc.)",
+      "Education #2: Invalid start date format '01-01-2010' (expected MMM-DD-YYYY)",
+      "Education #2: Invalid end date format '01-01-2010' (expected MMM-DD-YYYY)",
+      "Education #3: Invalid start date format '01-01-2006' (expected MMM-DD-YYYY)",
+      "Education #3: Invalid end date format '01-01-2006' (expected MMM-DD-YYYY)",
+      "Education #4: Invalid start date format '01-01-2004' (expected MMM-DD-YYYY)",
+      "Education #4: Invalid end date format '01-01-2004' (expected MMM-DD-YYYY)",
+      "Experience #1 (Axis Mutual Fund): Invalid start date '01-01-2023'",
+      "Experience #2 (Meridian Capital): Invalid start date '01-01-2022'",
+      "Experience #2 (Meridian Capital): Invalid end date '01-01-2023'",
+      "Experience #3 (ICICI Securities Limited): Invalid start date '01-01-2014'",
+      "Experience #3 (ICICI Securities Limited): Invalid end date '01-01-2022'",
+      "Experience #4 (BioAnalytics Research India Ltd.): Invalid start date '01-01-2013'",
+      "Experience #4 (BioAnalytics Research India Ltd.): Invalid end date '01-01-2014'"
+    ],
+    "warnings": [
+      "Missing phone number"
+    ]
+  }
+}

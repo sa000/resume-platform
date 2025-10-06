@@ -1,0 +1,30 @@
+{
+  "name": "Ryan Patel",
+  "current_title": null,
+  "current_company": "Meridian Capital Partners",
+  "years_experience": 6,
+  "sector_focus": [
+    "Financials",
+    "Technology",
+    "Consumer",
+    "Healthcare"
+  ],
+  "investment_approach": "Fundamental",
+  "primary_geography": "US",
+  "summary_blurb": "Experienced investment professional with a strong background in fundamental analysis across various sectors including Financials, Technology, Consumer, and Healthcare. Proven track record in managing portfolios and generating investment ideas through detailed diligence processes. Recognized for excellence in financial modeling and investment analysis.",
+  "notable_experience": [
+    "Meridian Capital Partners",
+    "Millennium Management",
+    "Apollo Global Management",
+    "J.P. Morgan"
+  ],
+  "top_skills": [
+    "Financial Modeling",
+    "DCF",
+    "Comparable Companies",
+    "LBO",
+    "Primary Research"
+  ],
+  "education_highlight": "B.S. in Business with a concentration in Finance and International Business from Columbia Business School, Columbia University.",
+  "certifications": []
+}

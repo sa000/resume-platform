@@ -1,0 +1,24 @@
+{
+  "candidate_name": "Michael Rodriguez",
+  "candidate_id": 5,
+  "timestamp": "2025-10-06T01:54:03.107587",
+  "total_issues": 7,
+  "issues_by_severity": {
+    "critical": 0,
+    "formatting": 7,
+    "warnings": 0
+  },
+  "issues": {
+    "critical": [],
+    "formatting": [
+      "Experience #2 (William Blair, Equity Research): Invalid start date 'April-01-2019'",
+      "Experience #2 (William Blair, Equity Research): Invalid end date 'January-01-2022'",
+      "Experience #3 (William Blair, Fixed Income Sales & Trading): Invalid start date 'April-01-2018'",
+      "Experience #3 (William Blair, Fixed Income Sales & Trading): Invalid end date 'April-01-2019'",
+      "Experience #4 (Guaranteed Rate, Mortgage Trading): Invalid start date 'July-01-2017'",
+      "Experience #4 (Guaranteed Rate, Mortgage Trading): Invalid end date 'March-01-2018'",
+      "Experience #5 (Magnetar Capital Management, Summer Intern): Invalid end date 'August-01-2016'"
+    ],
+    "warnings": []
+  }
+}

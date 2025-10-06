@@ -1,0 +1,212 @@
+{
+  "name": "Zara Al-Rashid",
+  "email": null,
+  "phone": null,
+  "location": "Mumbai, India",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "PGDM",
+      "major": "Finance",
+      "school": "Indian School of Business Management (ISBM), Pune",
+      "start": "Jan-01-2012",
+      "end": "Jan-01-2014",
+      "honors": null
+    },
+    {
+      "degree": "M.B.B.S",
+      "major": null,
+      "school": "K.J. Somaiya Medical College, Mumbai",
+      "start": "Jan-01-2005",
+      "end": "Jan-01-2010",
+      "honors": null
+    },
+    {
+      "degree": "XII Std.",
+      "major": null,
+      "school": "Mithibai College, Mumbai",
+      "start": "Jan-01-2003",
+      "end": "Jan-01-2004",
+      "honors": null
+    },
+    {
+      "degree": "X Std.",
+      "major": null,
+      "school": "St. Xavier's High School, Mumbai",
+      "start": "Jan-01-2001",
+      "end": "Jan-01-2002",
+      "honors": null
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Meridian Research Partners",
+      "title": "Lead Analyst – Pharmaceuticals and Healthcare",
+      "start": "May-01-2022",
+      "end": null,
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 28,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Generate investment ideas and publish equity research ratings with price targets on Indian healthcare sector companies across 28 stocks under coverage"
+      ]
+    },
+    {
+      "company": "Prism Financial Services",
+      "title": "Lead Analyst – Pharmaceuticals and Healthcare",
+      "start": "Oct-01-2020",
+      "end": "Apr-30-2022",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Voted by top domestic institutional investors: Axis Mutual Fund, SBI Mutual Fund, Nippon Life Asset Management, ICICI Prudential MF, Aditya Birla Sun Life MF, Reliance MF, LIC MF, Mirae Asset MF, Invesco MF, and Sundaram MF",
+        "Investment recommendation adopted by major institutional client resulting in 35% increase in brokerage commission revenue"
+      ]
+    },
+    {
+      "company": "Kotak Securities",
+      "title": "Lead Analyst – Pharmaceuticals and Healthcare",
+      "start": "Apr-01-2018",
+      "end": "Apr-30-2020",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Published sector thematic reports on Indian generics expansion, digital health initiatives, respiratory drug market, and healthcare policy reforms",
+        "Hosted Organized healthcare policy conference in Mumbai covering regulatory changes, generic drug policies, and government health initiatives with key policymakers"
+      ]
+    },
+    {
+      "company": "DataFlow Research India Pvt. Limited, Noida",
+      "title": "Manager – Equity Research",
+      "start": "May-01-2015",
+      "end": "Mar-31-2018",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Member, U.S. Healthcare Services ER team (Institutional Investor (II) Runner up) at Leerink Partners",
+        "Awarded \"Excellence in Research\" recognition for superior analytical work and report quality (2015)"
+      ]
+    },
+    {
+      "company": "J.P. Morgan Securities, London",
+      "title": "Equity Research Associate",
+      "start": "Sep-01-2013",
+      "end": "Dec-31-2013",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Europe"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Assist in team transition during replacement of a research associate and to work closely with the team",
+        "Attended meetings & calls with company IRs, institutional investors, & industry experts",
+        "Attended a company investor day at LSE and prepared a key takeaways note for publication"
+      ]
+    },
+    {
+      "company": "Cipla Pharmaceuticals, Mumbai",
+      "title": "Summer Intern",
+      "start": "Apr-01-2011",
+      "end": "May-31-2011",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Project scope Competitive Positioning strategy for newly launched generic Calpol T using MDS (Perceptual Mapping)",
+        "Formulated competitive positioning strategy & communication tactics as a result of which Calpol T Key achievements had overtaken more than 90 brands in same category and is currently holding the 2nd rank",
+        "Scored 99.92 percentile in Quantitative Aptitude in CAT-2009",
+        "Consistent score of over 95% in Mathematics through XII Std."
+      ]
+    }
+  ],
+  "skills": [
+    "MS Office",
+    "Bloomberg",
+    "Factset",
+    "Reuters",
+    "FDA",
+    "MedPAC",
+    "CMS",
+    "WHO",
+    "German DRG",
+    "USRDS",
+    "PubMed"
+  ],
+  "certifications": [],
+  "languages": [],
+  "primary_sector": "Healthcare",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "Asia-Pacific",
+  "current_level": "Director",
+  "years_experience": 8
+}

@@ -1,0 +1,230 @@
+{
+  "name": "Priya Nakamura",
+  "email": null,
+  "phone": null,
+  "location": "Mumbai, India",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "MBA",
+      "major": "Finance",
+      "school": "Mumbai Institute of Management Studies (MIMS)",
+      "start": "Jan-01-2011",
+      "end": "Dec-31-2013",
+      "honors": null
+    },
+    {
+      "degree": "MCOM",
+      "major": null,
+      "school": "University of Pune",
+      "start": "Jan-01-2013",
+      "end": "Dec-31-2013",
+      "honors": null
+    },
+    {
+      "degree": "B.M.S",
+      "major": null,
+      "school": "Thakur College of Commerce",
+      "start": "Jan-01-2007",
+      "end": "Dec-31-2007",
+      "honors": null
+    },
+    {
+      "degree": "HSC",
+      "major": null,
+      "school": "Jai Hind College",
+      "start": "Jan-01-2004",
+      "end": "Dec-31-2004",
+      "honors": null
+    },
+    {
+      "degree": "SSC",
+      "major": null,
+      "school": "Modern High School and Junior College",
+      "start": "Jan-01-2002",
+      "end": "Dec-31-2002",
+      "honors": null
+    }
+  ],
+  "experiences": [
+    {
+      "company": "ICICI Securities",
+      "title": "Lead Healthcare Analyst",
+      "start": "May-01-2023",
+      "end": null,
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 32,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Extensive coverage of 32 companies spread across all segments (pharma, hospital, diagnostics and medical devices) of the listed Indian healthcare universe.",
+        "Actively managed primary fund raise for Jupiter Hospital, Innova Captab, Entero Healthcare and AKUMS.",
+        "Periodical meetings with industry participants (listed & unlisted) to get a perspective of industry and key functioning areas of a company."
+      ]
+    },
+    {
+      "company": "J.P. Morgan Chase",
+      "title": "Lead Healthcare Analyst",
+      "start": "Sep-01-2021",
+      "end": "May-31-2023",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 22,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Formal coverage includes 22 companies across the healthcare value chain.",
+        "Periodical meetings with industry experts to get a perspective of industry and key functioning areas of a company.",
+        "Arranged corporate meetings/road shows, connect senior management of companies with key investors."
+      ]
+    },
+    {
+      "company": "Jardine Lloyd Thompson",
+      "title": "Lead Pharma Analyst",
+      "start": "Jan-01-2020",
+      "end": "Sep-30-2021",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 17,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Started my journey as a Lead Analyst at Anand Rathi with 17 pharma companies under direct coverage. Portfolio consisted of a blend of large and mid-cap companies.",
+        "Periodically update clients on corporate actions, news flow related to companies and events/updates pertaining to Healthcare sector globally.",
+        "Arranged corporate meetings/road shows, connect senior management of companies with key investors."
+      ]
+    },
+    {
+      "company": "Centrum Broking Ltd",
+      "title": "Research Analyst",
+      "start": "Jan-01-2017",
+      "end": "Dec-31-2019",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Focused approach towards analyzing and recommending differentiated and undervalued investment opportunities to institutional clients.",
+        "Developed comprehensive sectoral themes and provided regular updates on regulatory, competitive, and market dynamics to help clients make informed investment decisions.",
+        "Built extensive domain expertise in the pharmaceutical sector and consistently published high-quality research including initiation reports, sector outlook pieces, quarterly earnings analysis, and thematic investment reports.",
+        "Companies under direct coverage include MediCore Pharmaceuticals, Apex Lifesciences, BioGenex Labs, Zenith Therapeutics, Prism Pharma, VitalMed Industries, GlobalCare India, InnovaPharm Solutions, LifeTech Laboratories, Precision Biopharma, NexGen Medicines, and Quantum Healthcare Limited.",
+        "Supported senior analyst coverage of large-cap pharmaceutical companies through financial modeling, competitive analysis, and research report preparation for blue-chip healthcare names.",
+        "Maintained close monitoring of critical industry issues including regulatory compliance with USFDA, EMA and domestic authorities, manufacturing capabilities, API sourcing strategies, competitive positioning analysis, and patent cliff assessments."
+      ]
+    },
+    {
+      "company": "Morgan Stanley",
+      "title": "Equity Research Analyst",
+      "start": "Oct-01-2015",
+      "end": "Dec-31-2016",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Covered mid and small cap companies in the Indian pharmaceutical and speciality chemical space.",
+        "Build up financial models by getting details from interaction with company management and in depth analysis of various ratios and other financial parameters.",
+        "Screen various companies, try to study them on various parameters of value investing and sensibly highlight them in the report prepared for initiating coverage and IPOs, so that clients can take informed decisions.",
+        "Once a company is under coverage, I actively track them, prepare result update periodically and also prepare presentations for sales team for them to develop good understanding of the company."
+      ]
+    },
+    {
+      "company": "Transparent Value",
+      "title": "Equity Research Analyst",
+      "start": "Oct-01-2013",
+      "end": "Oct-01-2015",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 25,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Europe"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Analysed companies by reading financials & press release published by company, thoroughly understand the dynamics of the sector covered and understand the key drivers affecting a particular company for building better quality models.",
+        "Taking into account macro-economic factors for building the model by reading and having team discussions and build model whose final outcome is Required Business Performance (RBP) probability.",
+        "Write earnings report for a company based on the outcome of the models build.",
+        "Tracking companies in the portfolio on a daily basis for related news & events and making adjustments to the models if some fundamental changes occur which affect the company’s key drivers of earnings and make adjustments for corporate actions completed by company in the portfolio."
+      ]
+    }
+  ],
+  "skills": [
+    "Financial Modeling",
+    "Research",
+    "Equity Research",
+    "Pharmaceutical Analysis",
+    "Investment Recommendations",
+    "Market Dynamics",
+    "Corporate Actions",
+    "Client Management"
+  ],
+  "certifications": [],
+  "languages": [],
+  "primary_sector": "Healthcare",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "Asia-Pacific",
+  "current_level": "VP",
+  "years_experience": 9
+}

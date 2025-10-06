@@ -1,0 +1,23 @@
+{
+  "candidate_name": "Priya Nakamura",
+  "candidate_id": 1,
+  "timestamp": "2025-10-06T01:54:03.061445",
+  "total_issues": 4,
+  "issues_by_severity": {
+    "critical": 2,
+    "formatting": 1,
+    "warnings": 1
+  },
+  "issues": {
+    "critical": [
+      "Missing email address",
+      "Missing current title"
+    ],
+    "formatting": [
+      "Education #3: Invalid degree format 'B.M.S' (expected B.S., MBA, Ph.D., etc.)"
+    ],
+    "warnings": [
+      "Missing phone number"
+    ]
+  }
+}

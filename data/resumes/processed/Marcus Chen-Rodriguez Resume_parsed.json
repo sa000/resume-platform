@@ -1,0 +1,137 @@
+{
+  "name": "Marcus Chen-Rodriguez",
+  "email": "rchen@hotmail",
+  "phone": "+1-745-156-1879",
+  "location": "New York, NY, US",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "B.A.",
+      "major": "Economics",
+      "school": "Harvard University",
+      "start": "01-01-2009",
+      "end": "01-01-2013",
+      "honors": "Magna Cum Laude"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Coatue Management",
+      "title": "Healthcare Analyst, Investment Team",
+      "start": "Oct-01-2019",
+      "end": null,
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 2,
+      "num_sectors_covered": 1,
+      "coverage_value": "$40B",
+      "regions_covered": [
+        "North America"
+      ],
+      "sharpe_ratio": null,
+      "alpha": "340bps",
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Managed public (long/short) and private (growth/venture) healthcare investment portfolio at $40B multi-strategy platform",
+        "Provided comprehensive sector coverage across Life Sciences Tools & Diagnostics, MedTech, Therapeutics & Services with primary specialization in Digital Health & AI-enabled diagnostics (60% time allocation)",
+        "Generated 340bps of outperformance versus healthcare sector benchmarks with 85% hit rate on long recommendations",
+        "Served as Board Observer at two portfolio companies: MedFlow Diagnostics and GeneTech Analytics, having sourced and co-led the latter's $150M Series B financing round",
+        "Led due diligence on 12 potential investments with total transaction value of $2.1B across public and private healthcare opportunities"
+      ]
+    },
+    {
+      "company": "Goldman Sachs",
+      "title": "Senior Associate, Investment Team",
+      "start": "Jan-01-2019",
+      "end": "Sep-30-2019",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": "$18B",
+      "regions_covered": [
+        "North America"
+      ],
+      "sharpe_ratio": null,
+      "alpha": "280bps",
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Responsible for investment diligence, underwriting & asset management for $18B platform's $4.2B strategy focused on structured credit, growth equity and royalty financings in public and private companies",
+        "Created comprehensive financial models, investment analyses and board presentations while collaborating with third-party consultants, medical experts, and regulatory advisors",
+        "Presented investment recommendations to senior investment committee, portfolio managers and limited partner advisory boards",
+        "Generated 280bps of outperformance versus healthcare benchmarks across 9 active investments during tenure"
+      ]
+    },
+    {
+      "company": "Goldman Sachs",
+      "title": "Associate, Investment Team",
+      "start": "Apr-01-2017",
+      "end": "Dec-31-2018",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "North America"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": []
+    },
+    {
+      "company": "Credit Suisse",
+      "title": "Analyst, Healthcare Investment Banking Group",
+      "start": "Jun-01-2013",
+      "end": "Mar-31-2015",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Sell-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": "$12B+",
+      "regions_covered": [
+        "North America"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Provided client coverage in therapeutics, medical devices and healthcare services for acquisitions and financings across mid-cap and large-cap healthcare companies",
+        "Responsible for financial modeling and creating presentations on corporate valuation, transaction implications and industry dynamics for colleagues, management teams, investors, rating agencies and internal committees",
+        "Recognized for outstanding performance with invitation to Healthcare Investment Banking recruiting committee for 2013 summer analyst class",
+        "Executed 8 transactions with combined deal value of $12B+ across M&A, IPOs, and follow-on offerings"
+      ]
+    }
+  ],
+  "skills": [
+    "Financial modeling & analysis",
+    "healthcare industry domain expertise",
+    "public equities",
+    "private transactions"
+  ],
+  "certifications": [],
+  "languages": [],
+  "primary_sector": "Healthcare",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "US",
+  "current_level": "VP",
+  "years_experience": 6
+}

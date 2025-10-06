@@ -1,0 +1,20 @@
+{
+  "candidate_name": "Omar El-Hassan",
+  "candidate_id": 8,
+  "timestamp": "2025-10-06T01:54:03.131994",
+  "total_issues": 3,
+  "issues_by_severity": {
+    "critical": 0,
+    "formatting": 3,
+    "warnings": 0
+  },
+  "issues": {
+    "critical": [],
+    "formatting": [
+      "Education #1: Invalid degree format 'Diplôme d'Ingénieur' (expected B.S., MBA, Ph.D., etc.)",
+      "Education #2: Invalid degree format 'Master's degree' (expected B.S., MBA, Ph.D., etc.)",
+      "Education #3: Invalid degree format 'null' (expected B.S., MBA, Ph.D., etc.)"
+    ],
+    "warnings": []
+  }
+}

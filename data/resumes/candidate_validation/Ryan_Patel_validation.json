@@ -1,0 +1,18 @@
+{
+  "candidate_name": "Ryan Patel",
+  "candidate_id": 9,
+  "timestamp": "2025-10-06T01:54:03.137280",
+  "total_issues": 1,
+  "issues_by_severity": {
+    "critical": 1,
+    "formatting": 0,
+    "warnings": 0
+  },
+  "issues": {
+    "critical": [
+      "Missing current title"
+    ],
+    "formatting": [],
+    "warnings": []
+  }
+}

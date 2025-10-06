@@ -1,0 +1,157 @@
+{
+  "name": "Chen Li",
+  "email": "alex_chen2024@gmail.com",
+  "phone": "+852 65478923",
+  "location": "Hong Kong, HK, Asia-Pacific",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "M.S.",
+      "major": "Financial Technology",
+      "school": "University of Hong Kong",
+      "start": "Sept-01-2021",
+      "end": "Jul-01-2023",
+      "honors": null
+    },
+    {
+      "degree": "B.B.A.",
+      "major": "Finance",
+      "school": "University of Hong Kong",
+      "start": "Sept-01-2017",
+      "end": "Jul-01-2021",
+      "honors": null
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Bank of China",
+      "title": "Investment Analyst",
+      "start": "Jun-01-2021",
+      "end": "Sep-01-2023",
+      "sectors": [
+        "Technology",
+        "Healthcare"
+      ],
+      "approach": "Quantitative",
+      "client_type": "Buy-side",
+      "num_companies_covered": 35,
+      "num_sectors_covered": 15,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": 1.8,
+      "alpha": null,
+      "valuation_methods_used": [
+        "DCF",
+        "Relative Valuation"
+      ],
+      "quant_tools_used": [
+        "Python",
+        "Machine Learning"
+      ],
+      "bullet_points": [
+        "Conduct comprehensive quantitative analysis on large-scale Asian equity datasets to provide statistical support for portfolio managers.",
+        "Analyze market trends, sector rotations, and statistical anomalies, delivering actionable insights for investment decision-making and strategy optimization.",
+        "Independently developed, constructed and actively managed a multi-factor quantitative model focusing on Greater China technology equities, achieving superior risk-adjusted returns with Sharpe ratio of 1.8+ over 12-month period.",
+        "Established automated market surveillance system to monitor real-time market conditions, news sentiment, and macro events to identify investment opportunities and manage portfolio risk exposures.",
+        "Conducted rigorous backtesting and performance attribution analysis of systematic trading strategies, utilizing advanced statistical methods and machine learning techniques to enhance strategy performance and risk management."
+      ]
+    },
+    {
+      "company": "Bank of China",
+      "title": "Investment Intern",
+      "start": "Dec-01-2019",
+      "end": "May-01-2021",
+      "sectors": [
+        "Technology",
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": 35,
+      "num_sectors_covered": 15,
+      "coverage_value": null,
+      "regions_covered": [
+        "Asia-Pacific"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "DCF",
+        "Relative Valuation"
+      ],
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Performed comprehensive research on Asian technology and healthcare sectors, covering 15+ sub-industries and 35+ companies across Greater China markets.",
+        "Supported investment team by conducting expert interviews, analyzing financial statements, building DCF and relative valuation models, and preparing detailed investment research reports for portfolio review."
+      ]
+    },
+    {
+      "company": "Chinese University of Hong Kong",
+      "title": "Research Assistant (Economics Area)",
+      "start": "Mar-01-2019",
+      "end": "Mar-01-2021",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": [
+        "Python",
+        "R"
+      ],
+      "bullet_points": [
+        "Efficiently processed and analyzed over 200,000 historical Asian market firm-level data points using Python and R, conducting comprehensive statistical analysis for academic research.",
+        "Implemented advanced data processing techniques resulting in 25x improvement in research team computational efficiency.",
+        "Utilized Python and GIS mapping tools to analyze regional economic activity data from satellite imagery, generating 400+ analytical outputs including statistical reports and visualization packages for publication."
+      ]
+    },
+    {
+      "company": "Meridian Asia Capital",
+      "title": "Finance Market Department Intern (Chinese Bond and Equity Market)",
+      "start": "Jul-01-2019",
+      "end": "Aug-01-2019",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Conducted thorough investigation and analysis of equity information, resulting in the preparation of two comprehensive Equity Pledge Business Investigation Reports.",
+        "Assisted in company research and played a key role in drafting Bill Credit Investigation Reports."
+      ]
+    }
+  ],
+  "skills": [
+    "Python",
+    "R",
+    "SQL",
+    "Microsoft Office Suite",
+    "Bloomberg Terminal",
+    "WIND Database"
+  ],
+  "certifications": [],
+  "languages": [
+    "English (fluent)",
+    "Chinese (Mandarin: native)",
+    "Chinese (Cantonese: fluent)"
+  ],
+  "primary_sector": "Technology",
+  "primary_strategy": "Quantitative",
+  "primary_geography": "Asia-Pacific",
+  "current_level": "Analyst",
+  "years_experience": 2
+}

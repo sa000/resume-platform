@@ -1,0 +1,128 @@
+{
+  "name": "Marina Silva Costa",
+  "email": "marina.costa.finance@gmail.com",
+  "phone": "+44 (785) 429-1673",
+  "location": "Boston, MA, US",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "MBA",
+      "major": "Business Administration",
+      "school": "MIT Sloan School of Management",
+      "start": "Aug-01-2019",
+      "end": "May-01-2021",
+      "honors": "Investment Management Club Co-President; Latin America Conference 2020 organizer"
+    },
+    {
+      "degree": "B.S.",
+      "major": "Economics",
+      "school": "Fundacao Getulio Vargas",
+      "start": "Jan-01-2013",
+      "end": "Jan-01-2016",
+      "honors": "Manager of CJE-FF – a student-run equity fund – and the Investment Committee"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Vanguard Group",
+      "title": "Equity Research Analyst",
+      "start": "Aug-01-2021",
+      "end": null,
+      "sectors": [
+        "Healthcare",
+        "Consumer",
+        "Telecommunications"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "Emerging Latam",
+        "EMEA"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "Financial Modeling"
+      ],
+      "quant_tools_used": [],
+      "bullet_points": [
+        "Develops investment recommendations on publicly traded companies through fundamental research including financial modeling and proprietary studies, focused on healthcare, consumer discretionary an telecom companies operating primarily in emerging Latam and EMEA."
+      ]
+    },
+    {
+      "company": "Vanguard Group",
+      "title": "Equity Research Summer Analyst",
+      "start": "Jun-01-2020",
+      "end": "Aug-01-2020",
+      "sectors": null,
+      "approach": "Fundamental",
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "Financial Modeling"
+      ],
+      "quant_tools_used": [],
+      "bullet_points": [
+        "Developed investment recommendations on water technology publicly traded companies through fundamental research including financial modeling and proprietary studies."
+      ]
+    },
+    {
+      "company": "Bain & Company",
+      "title": "Business Analyst",
+      "start": "Jan-01-2016",
+      "end": "Jan-01-2019",
+      "sectors": [
+        "Consumer"
+      ],
+      "approach": null,
+      "client_type": null,
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": null,
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [],
+      "quant_tools_used": [],
+      "bullet_points": [
+        "Analyzed growth potential of e-commerce sales at major electronics retailer by proposing and estimating the impact of digital transformation initiatives such as omnichannel strategy, enhanced product recommendations and optimized logistics network.",
+        "Examined market and consumer trends affecting retail technology company for next 8 years, by consulting industry expert networks and identifying best practices; strategic framework was published in internal knowledge repository.",
+        "Built a dynamic pricing tool for a major consumer electronics company, to recommend price adjustments for each of the 35 main product categories, across 4 distribution channels and 180+ regional markets.",
+        "Redesigned customer service processes for major retail chain, creating standardized protocols, optimizing staffing levels, and developing workforce scheduling tool; during pilot implementation, coached store managers to ensure successful change management.",
+        "Implemented strategic sourcing transformation at major grocery chain, leading cross-functional teams of 3-4 client members in each product category to deliver ~4 percentage points of gross margin improvement.",
+        "Supervised progress of initiatives in supply chain optimization engagement for retail client, and in digital transformation program for logistics provider, managing junior client teams and ensuring execution excellence.",
+        "Developed a recommendation for a major infrastructure player regarding entrance in a new segment, by mapping main players, margins, current and potential market size, capabilities required, and investment needed.",
+        "Investigated structure and functioning of more than 15 loyalty programs, by interviewing colleagues from all over the world, and reaching out to market experts, to redesign loyalty program of a banking client.",
+        "Managed progress of 200+ initiatives in a large-scale lean manufacturing engagement for an aerospace player, by coordinating work of directors and managers of the company.",
+        "Led launch of McKinsey’s first case competition, receiving 3.300 applications to an in-person event that mobilized +50 consultants from McKinsey Brazil."
+      ]
+    }
+  ],
+  "skills": [
+    "Python",
+    "R",
+    "Advanced Excel/VBA"
+  ],
+  "certifications": [
+    "GMAT"
+  ],
+  "languages": [
+    "Portuguese (Fluent)",
+    "English (Fluent)",
+    "Spanish (Conversational)"
+  ],
+  "primary_sector": "Consumer",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "US",
+  "current_level": "Analyst",
+  "years_experience": 5
+}

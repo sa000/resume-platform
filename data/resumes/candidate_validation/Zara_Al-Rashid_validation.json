@@ -1,0 +1,25 @@
+{
+  "candidate_name": "Zara Al-Rashid",
+  "candidate_id": 10,
+  "timestamp": "2025-10-06T01:54:03.144255",
+  "total_issues": 6,
+  "issues_by_severity": {
+    "critical": 2,
+    "formatting": 3,
+    "warnings": 1
+  },
+  "issues": {
+    "critical": [
+      "Missing email address",
+      "Missing current title"
+    ],
+    "formatting": [
+      "Education #2: Invalid degree format 'M.B.B.S' (expected B.S., MBA, Ph.D., etc.)",
+      "Education #3: Invalid degree format 'XII Std.' (expected B.S., MBA, Ph.D., etc.)",
+      "Education #4: Invalid degree format 'X Std.' (expected B.S., MBA, Ph.D., etc.)"
+    ],
+    "warnings": [
+      "Missing phone number"
+    ]
+  }
+}

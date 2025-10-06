@@ -1,0 +1,16 @@
+{
+  "candidate_name": "Vikram Shah",
+  "candidate_id": 6,
+  "timestamp": "2025-10-06T01:54:03.117471",
+  "total_issues": 0,
+  "issues_by_severity": {
+    "critical": 0,
+    "formatting": 0,
+    "warnings": 0
+  },
+  "issues": {
+    "critical": [],
+    "formatting": [],
+    "warnings": []
+  }
+}

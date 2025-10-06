@@ -1,0 +1,154 @@
+{
+  "name": "Ryan Patel",
+  "email": "ryan.patel0403@gmail.com",
+  "phone": "+1 (516) 523-3113",
+  "location": "Brooklyn, NY, US",
+  "linkedin": null,
+  "objective": null,
+  "education": [
+    {
+      "degree": "B.S.",
+      "major": "Business: Concentration in Finance and International Business, Minor in Statistics",
+      "school": "Columbia Business School, Columbia University",
+      "start": "Sep-01-2013",
+      "end": "May-01-2017",
+      "honors": "GPA: 3.61/4.00 | Dean's Merit Scholarship (awarded for all four years) | Student Leadership Excellence Award (awarded to top 3 graduating seniors), Academic Achievement Recognition"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Meridian Capital Partners",
+      "title": "Investment Professional, Generalist – Soft Catalyst & Fundamental Long/Short",
+      "start": "Mar-01-2023",
+      "end": null,
+      "sectors": [
+        "Financials",
+        "Technology"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Primary investor responsible for managing the only long short fundamental equity portfolio at Meridian Capital Partners",
+        "Lead investment decisions for the portfolio including sizing of positions based on conviction level/idiosyncratic volatility, hedging of positions using public peers and/or appropriate sector ETFs/market indices, and timing of position initiation and monetization",
+        "Generate new investment ideas based on detailed and disciplined diligence processes, including meetings with C-Suite Executives/IR, calls with third-party experts, attending industry conferences, and analyses of alternative datasets provided by third parties",
+        "Provide portfolio updates on a bi-weekly basis to Meridian's Founder/CIO and CRO including formal quarterly updates/presentations on position level performances, hit rates, and key risk metrics such as target volatility and factor attribution"
+      ]
+    },
+    {
+      "company": "Millennium Management",
+      "title": "Investment Analyst, Consumer & TMT – North53 Capital",
+      "start": "Sep-01-2021",
+      "end": "Aug-01-2022",
+      "sectors": [
+        "Consumer",
+        "Technology"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": "$4.2B",
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": [
+        "DCF",
+        "Comparable Companies",
+        "LBO"
+      ],
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Principal analyst responsible for managing the Consumer and Technology portfolio within the $4.2bn gross portfolio for Vertex Capital",
+        "Co-managed the risk exposures of the Consumer and Technology portfolio with the Senior Portfolio Manager including discretion over position sizing (idiosyncratic volatility/conviction), alpha/factor exposures (hedges), and timing of position entry/exit",
+        "Presented new investment ideas based on fundamental analyses, primary research, industry events/conferences, sector expert consultations, and company management meetings; actively present findings/ideas through written memos and deep dive analyses",
+        "Constructed and maintained financial models for core positions, with analyses evaluating growth drivers, competitive positioning, and structural/strategic transformation; includes operating model, DCF, comparable companies, LBO, and precedent transactions"
+      ]
+    },
+    {
+      "company": "Apollo Global Management",
+      "title": "Associate – Private Equity",
+      "start": "Aug-01-2019",
+      "end": "Aug-01-2021",
+      "sectors": [
+        "Consumer",
+        "Healthcare",
+        "Technology"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Buy-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Evaluated and executed private equity investments across the Business & Technology Services, Consumer, and Healthcare industries",
+        "Performed due diligence on businesses to determine competitive advantages, key growth drivers, addressable markets, and risks",
+        "Worked directly with management at portfolio companies to manage any operational and liquidity risk, particularly during COVID",
+        "Board observer: Strategic Safety Solutions (global industrial consulting firm), MedTech Manufacturing (medical device contract manufacturer)"
+      ]
+    },
+    {
+      "company": "J.P. Morgan",
+      "title": "Analyst – Healthcare Investment Banking",
+      "start": "Jul-01-2017",
+      "end": "Jul-01-2019",
+      "sectors": [
+        "Healthcare"
+      ],
+      "approach": "Fundamental",
+      "client_type": "Sell-side",
+      "num_companies_covered": null,
+      "num_sectors_covered": null,
+      "coverage_value": null,
+      "regions_covered": [
+        "US"
+      ],
+      "sharpe_ratio": null,
+      "alpha": null,
+      "valuation_methods_used": null,
+      "quant_tools_used": null,
+      "bullet_points": [
+        "Ranked top tier of analyst class in two years at J.P. Morgan; winner of Firmwide Summer Analyst Financial Modeling Competition",
+        "Participated in all aspects of M&A, equity, and debt transactions including idea generation, due diligence, and valuation",
+        "Selected Transaction Experience:",
+        "Exclusive financial advisor – BioPharm Corp's $8.5bn acquisition of Oncology Therapeutics Inc",
+        "Exclusive financial advisor and lead-left arranger of financing – Blackstone Life Sciences' acquisition of Clinical Research Partners"
+      ]
+    }
+  ],
+  "skills": [
+    "Financial Modeling",
+    "DCF",
+    "Comparable Companies",
+    "LBO",
+    "Primary Research",
+    "Portfolio Management",
+    "Risk Management",
+    "Investment Analysis"
+  ],
+  "certifications": [],
+  "languages": [],
+  "primary_sector": "Financials",
+  "primary_strategy": "Fundamental",
+  "primary_geography": "US",
+  "current_level": "VP",
+  "years_experience": 6
+}

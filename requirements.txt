@@ -1,0 +1,20 @@
+# Core
+pandas
+numpy
+
+# Document parsing
+python-docx
+pypdf
+
+# LLM APIs
+openai
+
+# Web app
+streamlit
+plotly
+matplotlib
+wordcloud
+
+# Utilities
+tqdm
+python-dotenv
