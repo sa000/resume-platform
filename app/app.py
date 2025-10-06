@@ -7,8 +7,12 @@ import json
 import mimetypes
 import tempfile
 import base64
+import logging
 
-from docx import Document 
+from docx import Document
+
+logger = logging.getLogger(__name__)
+
 # =============================
 # 🔧 CONFIG
 # =============================
@@ -92,6 +96,170 @@ def get_unique_values(table: str, column: str):
     df = pd.read_sql_query(q, conn)
     conn.close()
     return sorted(df[column].dropna().unique().tolist())
+
+
+def search_candidates(search_query: str):
+    """
+    Full-text search across all candidate data using FTS5.
+    Returns candidates ranked by relevance with match information.
+
+    Args:
+        search_query: Search terms (supports phrases, AND/OR logic, prefix matching)
+
+    Returns:
+        pandas.DataFrame: Matching candidates with all fields plus match_info column
+    """
+    if not search_query or search_query.strip() == "":
+        return None  # Return None to indicate no search performed
+
+    conn = sqlite3.connect(DB_PATH)
+
+    # FTS5 query with ranking - join back to get all candidate data
+    query = """
+        SELECT
+            c.*,
+            qs.quality_score,
+            qs.grade AS quality_grade,
+            qs.total_issues,
+            GROUP_CONCAT(DISTINCT s.skill) AS all_skills,
+            GROUP_CONCAT(DISTINCT e.company) AS all_companies,
+            GROUP_CONCAT(DISTINCT ed.school) AS all_schools,
+            GROUP_CONCAT(DISTINCT ed.degree) AS all_degrees,
+            fts.rank,
+            fts.name as fts_name,
+            fts.current_title as fts_title,
+            fts.current_company as fts_company,
+            fts.skills as fts_skills,
+            fts.experience_text as fts_experience,
+            fts.education_text as fts_education,
+            fts.certifications as fts_certs
+        FROM candidates_fts fts
+        JOIN candidates c ON c.id = fts.candidate_id
+        LEFT JOIN skills s ON s.candidate_id = c.id
+        LEFT JOIN experiences e ON e.candidate_id = c.id
+        LEFT JOIN education ed ON ed.candidate_id = c.id
+        LEFT JOIN quality_scores qs ON qs.candidate_id = c.id
+        WHERE candidates_fts MATCH ?
+        GROUP BY c.id
+        ORDER BY fts.rank
+    """
+
+    try:
+        df = pd.read_sql_query(query, conn, params=(search_query,))
+        conn.close()
+
+        # Process JSON fields like in load_candidates
+        for col in ["top_skills", "notable_experience"]:
+            if col in df.columns:
+                df[col] = df[col].apply(lambda x: json.loads(x) if isinstance(x, str) and x.startswith("[") else [])
+
+        # Determine highest degree for each candidate (same as load_candidates)
+        def get_highest_degree(degrees_str):
+            if not degrees_str:
+                return None
+            degrees = str(degrees_str).upper().split(',')
+            degree_hierarchy = {'PH.D.': 4, 'PHD': 4, 'PH.D': 4, 'MBA': 3, 'M.S.': 2, 'MS': 2, 'M.S': 2, 'B.S.': 1, 'BS': 1, 'B.S': 1, 'BA': 1, 'B.A.': 1}
+            highest = None
+            highest_rank = 0
+            for degree in degrees:
+                degree = degree.strip()
+                for key, rank in degree_hierarchy.items():
+                    if key in degree:
+                        if rank > highest_rank:
+                            highest_rank = rank
+                            if rank == 4:
+                                highest = 'PhD'
+                            elif rank == 3:
+                                highest = 'MBA'
+                            elif rank == 2:
+                                highest = 'MS'
+                            elif rank == 1:
+                                highest = 'BS'
+            return highest
+
+        df['highest_degree'] = df['all_degrees'].apply(get_highest_degree)
+
+        # Determine what matched for each candidate
+        def get_match_info(row):
+            query_lower = search_query.lower()
+            matches = []
+
+            # Check each field for matches
+            if row.get('fts_name') and query_lower in str(row['fts_name']).lower():
+                matches.append(f"👤 Name: {row['name']}")
+
+            if row.get('fts_company') and query_lower in str(row['fts_company']).lower():
+                matches.append(f"🏢 Company: {row['current_company']}")
+
+            if row.get('fts_title') and query_lower in str(row['fts_title']).lower():
+                matches.append(f"💼 Title: {row['current_title']}")
+
+            if row.get('fts_skills') and query_lower in str(row['fts_skills']).lower():
+                # Find which skills matched
+                skills = str(row.get('all_skills', '')).split(',')
+                matched_skills = [s.strip() for s in skills if query_lower in s.lower()]
+                if matched_skills:
+                    matches.append(f"🧠 Skills: {', '.join(matched_skills[:3])}")
+
+            if row.get('all_companies') and query_lower in str(row['all_companies']).lower():
+                companies = str(row['all_companies']).split(',')
+                matched_companies = [c.strip() for c in companies if query_lower in c.lower()]
+                if matched_companies and matched_companies[0] != row.get('current_company'):
+                    matches.append(f"🏦 Past Experience: {', '.join(matched_companies[:2])}")
+
+            if row.get('fts_education') and query_lower in str(row['fts_education']).lower():
+                matches.append(f"🎓 Education matched")
+
+            if row.get('fts_certs') and query_lower in str(row['fts_certs']).lower():
+                matches.append(f"🏆 Certifications matched")
+
+            return matches if matches else ["✨ Relevant match found"]
+
+        df['match_info'] = df.apply(get_match_info, axis=1)
+
+        return df
+    except Exception as e:
+        logger.error(f"Search failed: {e}")
+        st.error(f"Search error: {e}")
+        conn.close()
+        return None
+
+
+def get_search_suggestions():
+    """
+    Get common search terms for autocomplete/suggestions.
+    Returns popular companies, skills, degrees.
+    """
+    conn = sqlite3.connect(DB_PATH)
+    suggestions = []
+
+    try:
+        # Top companies
+        companies = pd.read_sql_query(
+            "SELECT DISTINCT company FROM experiences WHERE company IS NOT NULL ORDER BY company LIMIT 30",
+            conn
+        )
+        suggestions.extend(companies['company'].tolist())
+
+        # Top skills
+        skills = pd.read_sql_query(
+            "SELECT DISTINCT skill FROM skills WHERE skill IS NOT NULL ORDER BY skill LIMIT 30",
+            conn
+        )
+        suggestions.extend(skills['skill'].tolist())
+
+        # Degrees
+        degrees = pd.read_sql_query(
+            "SELECT DISTINCT degree FROM education WHERE degree IS NOT NULL ORDER BY degree",
+            conn
+        )
+        suggestions.extend(degrees['degree'].tolist())
+
+    except Exception as e:
+        logger.error(f"Failed to get suggestions: {e}")
+
+    conn.close()
+    return sorted(set(suggestions))  # Remove duplicates and sort
 
 
 # =============================
@@ -205,6 +373,7 @@ if st.session_state.flagged_candidates:
             else:
                 st.info("No flagged candidates yet.")
 
+
 # =============================
 # 📊 VISUALIZATIONS - MOVED TO TOP
 # =============================
@@ -300,6 +469,38 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 # =============================
 st.markdown('<h2 class="section-header">🔎 Search & Filter Candidates</h2>', unsafe_allow_html=True)
 
+# Initialize search in session state
+if 'search_query' not in st.session_state:
+    st.session_state.search_query = ""
+
+# Search bar at top of filters
+st.markdown("#### 🔍 Smart Search")
+col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
+
+with col_search1:
+    search_input = st.text_input(
+        "Search across all candidate data",
+        value=st.session_state.search_query,
+        placeholder="e.g., 'Goldman Sachs', 'Python machine learning', 'PhD', 'CFA', 'quantitative'...",
+        help="Live search across names, companies, skills, education, certifications, and experience",
+        label_visibility="collapsed",
+        key="search_input_field"
+    )
+
+with col_search2:
+    if st.button("🔍 Search", type="primary", width='stretch'):
+        st.session_state.search_query = search_input
+        st.rerun()
+
+with col_search3:
+    if st.button("🔄 Clear", type="secondary", width='stretch'):
+        st.session_state.search_query = ""
+        st.rerun()
+
+# Use the session state search query
+search_query = st.session_state.search_query
+
+st.markdown("#### 🎛️ Additional Filters")
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col1:
@@ -334,71 +535,82 @@ with col7:
 with col8:
     selected_skills = st.multiselect("🧠 Skills", options=all_skills, placeholder="Choose skills...")
 
-keyword = st.text_input("🔎 Keyword Search", placeholder="Search by name, title, company, or any keyword...", help="Search across all candidate information")
-
 
 # =============================
 # ⚙️ APPLY FILTERS
 # =============================
-filtered = df.copy()
+# First, apply FTS5 search if query exists
+if search_query and search_query.strip():
+    search_results = search_candidates(search_query)
 
-# Filter by geography
-if geo != "All":
-    filtered = filtered[filtered["primary_geography"] == geo]
+    if search_results is not None and not search_results.empty:
+        filtered = search_results.copy()
+        st.success(f"✨ Found **{len(filtered)}** candidates matching: **{search_query}**")
+    else:
+        st.warning("❌ No candidates found matching your search query. Try different keywords.")
+        filtered = pd.DataFrame()  # Empty dataframe
+else:
+    # No search query - start with all candidates
+    filtered = df.copy()
 
-# Filter by investment approach
-if approach != "All":
-    filtered = filtered[filtered["investment_approach"] == approach]
+# Apply additional filters on top of search results (if any)
+if not filtered.empty:
+    # Filter by geography
+    if geo != "All":
+        filtered = filtered[filtered["primary_geography"] == geo]
 
-# Filter by sector
-if sector != "All":
-    filtered = filtered[filtered["primary_sector"] == sector]
+    # Filter by investment approach
+    if approach != "All":
+        filtered = filtered[filtered["investment_approach"] == approach]
 
-# Filter by education degree
-if education_degree != "All":
-    filtered = filtered[
-        filtered["all_degrees"].apply(lambda x: education_degree in str(x) if x else False)
-    ]
+    # Filter by sector
+    if sector != "All":
+        filtered = filtered[filtered["primary_sector"] == sector]
 
-# Filter by experience range
-filtered = filtered[(filtered["years_experience"] >= min_exp) & (filtered["years_experience"] <= max_exp)]
+    # Filter by education degree
+    if education_degree != "All":
+        filtered = filtered[
+            filtered["all_degrees"].apply(lambda x: education_degree in str(x) if x else False)
+        ]
 
-# Filter by company
-if company != "All":
-    filtered = filtered[
-        filtered["all_companies"].apply(lambda x: company.lower() in str(x).lower() if x else False)
-    ]
+    # Filter by experience range
+    filtered = filtered[(filtered["years_experience"] >= min_exp) & (filtered["years_experience"] <= max_exp)]
 
-# Filter by school
-if school != "All":
-    filtered = filtered[
-        filtered["all_schools"].apply(lambda x: school.lower() in str(x).lower() if x else False)
-    ]
+    # Filter by company
+    if company != "All":
+        filtered = filtered[
+            filtered["all_companies"].apply(lambda x: company.lower() in str(x).lower() if x else False)
+        ]
 
-# Match any selected skill
-if selected_skills:
-    filtered = filtered[
-        filtered["all_skills"].apply(lambda x: any(skill.lower() in str(x).lower() for skill in selected_skills))
-    ]
+    # Filter by school
+    if school != "All":
+        filtered = filtered[
+            filtered["all_schools"].apply(lambda x: school.lower() in str(x).lower() if x else False)
+        ]
 
-# Keyword search across core text fields
-if keyword:
-    keyword = keyword.lower()
-    search_cols = ["name", "current_title", "current_company", "summary_blurb", "all_skills", "all_companies", "all_schools"]
-    filtered = filtered[
-        filtered[search_cols].apply(lambda row: any(keyword in str(v).lower() for v in row), axis=1)
-    ]
+    # Match any selected skill
+    if selected_skills:
+        filtered = filtered[
+            filtered["all_skills"].apply(lambda x: any(skill.lower() in str(x).lower() for skill in selected_skills))
+        ]
 
 
 # =============================
 # 📋 RESULTS TABLE
 # =============================
 st.markdown("<br>", unsafe_allow_html=True)
-st.markdown(f'<h2 class="section-header">👥 Search Results: {len(filtered)} Candidates Found</h2>', unsafe_allow_html=True)
+
+# Show different header based on search vs filters
+if search_query and search_query.strip():
+    st.markdown(f'<h2 class="section-header">🔍 Search Results: {len(filtered)} Candidates</h2>', unsafe_allow_html=True)
+    if len(filtered) > 0:
+        st.caption(f"Showing results for '{search_query}' with applied filters")
+else:
+    st.markdown(f'<h2 class="section-header">👥 All Candidates: {len(filtered)} Found</h2>', unsafe_allow_html=True)
 
 # Show count summary with color
 if len(filtered) == 0:
-    st.warning("🔍 No candidates match your search criteria. Try adjusting your filters.")
+    st.warning("🔍 No candidates match your criteria. Try adjusting filters or search terms.")
 elif len(filtered) < 5:
     st.success(f"✅ Found {len(filtered)} highly relevant candidate(s)")
 else:
@@ -417,21 +629,37 @@ cols = [
 # Show summary table with better column names
 display_df = filtered[cols].copy()
 display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
-st.dataframe(display_df, use_container_width=True, hide_index=True)
+st.dataframe(display_df, width='stretch', hide_index=True)
 
 st.markdown('<h2 class="section-header">📄 Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
+
+# Auto-expand if search results and less than 5 candidates
+auto_expand = bool(search_query and search_query.strip() and len(filtered) <= 5)
 
 for idx, row in filtered.iterrows():
     candidate_id = row['id']
     current_roles = st.session_state.flagged_candidates.get(candidate_id, [])
 
-    with st.expander(f"📘 {row['name']} — {row['current_title']} at {row['current_company']}", expanded=False):
+    # Show match info if this is from a search
+    match_badges = ""
+    if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
+        match_badges = " • " + " • ".join(row['match_info'][:3])
+
+    with st.expander(f"📘 {row['name']} — {row['current_title']} at {row['current_company']}", expanded=auto_expand):
         # Create a nice header card
         col_left, col_right = st.columns([2, 1])
 
         with col_left:
             st.markdown(f"### {row['name']}")
             st.markdown(f"**{row['current_title']}** at **{row['current_company']}**")
+
+            # Show what matched for this candidate
+            if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
+                st.markdown("**🎯 Matched on:**")
+                for match in row['match_info']:
+                    st.markdown(f"- {match}")
+                st.markdown("---")
+
             if row.get('summary_blurb'):
                 st.markdown(f"*{row['summary_blurb']}*")
 

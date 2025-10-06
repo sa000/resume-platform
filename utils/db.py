@@ -116,6 +116,18 @@ def drop_and_create_tables(conn):
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(candidate_id) REFERENCES candidates(id)
     );
+
+    CREATE VIRTUAL TABLE candidates_fts USING fts5(
+        candidate_id UNINDEXED,
+        name,
+        current_title,
+        current_company,
+        skills,
+        experience_text,
+        education_text,
+        all_companies,
+        certifications
+    );
     """)
     conn.commit()
 
@@ -250,3 +262,157 @@ def insert_quality_score(conn, candidate_id: int, quality_score: float, grade: s
     ))
     conn.commit()
     return cur.lastrowid
+
+
+def insert_to_fts(conn, candidate_id: int, parsed_data: dict, summary_data: dict):
+    """
+    Populate full-text search index for a candidate.
+    Combines all searchable text fields for fast cross-attribute searching.
+    """
+    # Skills text
+    skills_text = ' '.join(summary_data.get('top_skills', []) or [])
+
+    # Certifications text
+    certs = summary_data.get('certifications', []) or []
+    certs_text = ' '.join(certs) if certs else ''
+
+    # Experience text: all companies, titles, and bullet points
+    experiences = parsed_data.get('experiences', []) or []
+    all_companies = []
+    experience_parts = []
+
+    for exp in experiences:
+        company = exp.get('company', '')
+        title = exp.get('title', '')
+        if company:
+            all_companies.append(company)
+        experience_parts.append(f"{company} {title}")
+
+        # Add bullet points for deeper search
+        bullets = exp.get('bullet_points', [])
+        if bullets:
+            experience_parts.extend(bullets)
+
+    experience_text = ' '.join(experience_parts)
+    all_companies_text = ' '.join(all_companies)
+
+    # Education text: degrees, majors, and schools
+    education = parsed_data.get('education', []) or []
+    education_parts = []
+
+    for edu in education:
+        degree = edu.get('degree', '')
+        major = edu.get('major', '')
+        school = edu.get('school', '')
+        education_parts.append(f"{degree} {major} {school}")
+
+    education_text = ' '.join(education_parts)
+
+    # Insert into FTS table
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO candidates_fts (
+            candidate_id, name, current_title, current_company,
+            skills, experience_text, education_text, all_companies, certifications
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        candidate_id,
+        summary_data.get('name', ''),
+        summary_data.get('current_title', ''),
+        summary_data.get('current_company', ''),
+        skills_text,
+        experience_text,
+        education_text,
+        all_companies_text,
+        certs_text
+    ))
+    conn.commit()
+
+
+# ---------- SEARCH FUNCTIONS ---------- #
+
+def search_candidates(search_query: str, db_path: str = DB_PATH):
+    """
+    Full-text search across all candidate data using FTS5.
+    Returns candidates ranked by relevance.
+
+    Args:
+        search_query: Search terms (supports phrases, AND/OR logic, prefix matching)
+        db_path: Path to database
+
+    Returns:
+        pandas.DataFrame: Matching candidates with all fields
+    """
+    import pandas as pd
+
+    if not search_query or search_query.strip() == "":
+        return None  # Return None to indicate no search performed
+
+    conn = get_connection(db_path)
+
+    # FTS5 query with ranking - join back to get all candidate data
+    query = """
+        SELECT
+            c.*,
+            GROUP_CONCAT(DISTINCT s.skill) AS all_skills,
+            GROUP_CONCAT(DISTINCT e.company) AS all_companies,
+            GROUP_CONCAT(DISTINCT ed.school) AS all_schools,
+            GROUP_CONCAT(DISTINCT ed.degree) AS all_degrees,
+            fts.rank
+        FROM candidates_fts fts
+        JOIN candidates c ON c.id = fts.candidate_id
+        LEFT JOIN skills s ON s.candidate_id = c.id
+        LEFT JOIN experiences e ON e.candidate_id = c.id
+        LEFT JOIN education ed ON ed.candidate_id = c.id
+        WHERE candidates_fts MATCH ?
+        GROUP BY c.id
+        ORDER BY fts.rank
+    """
+
+    try:
+        df = pd.read_sql_query(query, conn, params=(search_query,))
+        conn.close()
+        return df
+    except Exception as e:
+        logger.error(f"Search failed: {e}")
+        conn.close()
+        return None
+
+
+def get_search_suggestions(db_path: str = DB_PATH):
+    """
+    Get common search terms for autocomplete/suggestions.
+    Returns popular companies, skills, degrees.
+    """
+    import pandas as pd
+
+    conn = get_connection(db_path)
+    suggestions = []
+
+    try:
+        # Top companies
+        companies = pd.read_sql_query(
+            "SELECT DISTINCT company FROM experiences WHERE company IS NOT NULL ORDER BY company LIMIT 30",
+            conn
+        )
+        suggestions.extend(companies['company'].tolist())
+
+        # Top skills
+        skills = pd.read_sql_query(
+            "SELECT DISTINCT skill FROM skills WHERE skill IS NOT NULL ORDER BY skill LIMIT 30",
+            conn
+        )
+        suggestions.extend(skills['skill'].tolist())
+
+        # Degrees
+        degrees = pd.read_sql_query(
+            "SELECT DISTINCT degree FROM education WHERE degree IS NOT NULL ORDER BY degree",
+            conn
+        )
+        suggestions.extend(degrees['degree'].tolist())
+
+    except Exception as e:
+        logger.error(f"Failed to get suggestions: {e}")
+
+    conn.close()
+    return sorted(set(suggestions))  # Remove duplicates and sort

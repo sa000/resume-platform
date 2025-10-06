@@ -5,7 +5,8 @@
       "Bash(python3 -c \"import json; f=open(''/Users/sakib/Downloads/resume-platform/2025_ds_case_study_resume_platform.ipynb''); data=json.load(f); [print(f''Cell {i}:\\n{chr(34).join(cell.get(chr(34)+\"\"source\"\"+chr(34), []))}'') for i, cell in enumerate(data[''cells'']) if ''def parse_resume'' in ''''.join(cell.get(''source'', []))]\")",
       "Bash(brew install:*)",
       "Bash(python3:*)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(streamlit run:*)"
     ],
     "deny": [],
     "ask": []
