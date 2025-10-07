@@ -36,7 +36,7 @@
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": [
-        "Valuation analysis"
+        "Valuation Analysis"
       ],
       "quant_tools_used": null,
       "bullet_points": [
@@ -64,8 +64,8 @@
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": [
-        "IPO syndicate models",
-        "Valuation metrics"
+        "Earnings Estimates",
+        "Valuation Metrics"
       ],
       "quant_tools_used": null,
       "bullet_points": [
@@ -94,7 +94,7 @@
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": [
-        "Three-statement valuation models"
+        "Three-statement Valuation Models"
       ],
       "quant_tools_used": null,
       "bullet_points": [
@@ -108,13 +108,17 @@
       "title": "Capital Markets Analyst",
       "start": "July-01-2017",
       "end": "March-01-2018",
-      "sectors": null,
+      "sectors": [
+        "Financials"
+      ],
       "approach": null,
       "client_type": null,
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": null,
+      "regions_covered": [
+        "US"
+      ],
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -137,7 +141,9 @@
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": null,
+      "regions_covered": [
+        "US"
+      ],
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -167,5 +173,5 @@
   "primary_strategy": "Fundamental",
   "primary_geography": "US",
   "current_level": "Analyst",
-  "years_experience": 4
+  "years_experience": 5
 }

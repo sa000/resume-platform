@@ -78,7 +78,7 @@
       "company": "J.P. Morgan Chase",
       "title": "Lead Healthcare Analyst",
       "start": "Sep-01-2021",
-      "end": "May-31-2023",
+      "end": "May-01-2023",
       "sectors": [
         "Healthcare"
       ],
@@ -104,7 +104,7 @@
       "company": "Jardine Lloyd Thompson",
       "title": "Lead Pharma Analyst",
       "start": "Jan-01-2020",
-      "end": "Sep-30-2021",
+      "end": "Sep-01-2021",
       "sectors": [
         "Healthcare"
       ],
@@ -150,9 +150,7 @@
         "Focused approach towards analyzing and recommending differentiated and undervalued investment opportunities to institutional clients.",
         "Developed comprehensive sectoral themes and provided regular updates on regulatory, competitive, and market dynamics to help clients make informed investment decisions.",
         "Built extensive domain expertise in the pharmaceutical sector and consistently published high-quality research including initiation reports, sector outlook pieces, quarterly earnings analysis, and thematic investment reports.",
-        "Companies under direct coverage include MediCore Pharmaceuticals, Apex Lifesciences, BioGenex Labs, Zenith Therapeutics, Prism Pharma, VitalMed Industries, GlobalCare India, InnovaPharm Solutions, LifeTech Laboratories, Precision Biopharma, NexGen Medicines, and Quantum Healthcare Limited.",
-        "Supported senior analyst coverage of large-cap pharmaceutical companies through financial modeling, competitive analysis, and research report preparation for blue-chip healthcare names.",
-        "Maintained close monitoring of critical industry issues including regulatory compliance with USFDA, EMA and domestic authorities, manufacturing capabilities, API sourcing strategies, competitive positioning analysis, and patent cliff assessments."
+        "Supported senior analyst coverage of large-cap pharmaceutical companies through financial modeling, competitive analysis, and research report preparation for blue-chip healthcare names."
       ]
     },
     {
@@ -178,7 +176,7 @@
       "bullet_points": [
         "Covered mid and small cap companies in the Indian pharmaceutical and speciality chemical space.",
         "Build up financial models by getting details from interaction with company management and in depth analysis of various ratios and other financial parameters.",
-        "Screen various companies, try to study them on various parameters of value investing and sensibly highlight them in the report prepared for initiating coverage and IPOs, so that clients can take informed decisions.",
+        "Screen various companies, try to study them on various parameters of value investing and sensibly highlight them in the report prepared for initiating coverage and IPOs.",
         "Once a company is under coverage, I actively track them, prepare result update periodically and also prepare presentations for sales team for them to develop good understanding of the company."
       ]
     },
@@ -192,10 +190,11 @@
       ],
       "approach": "Fundamental",
       "client_type": "Buy-side",
-      "num_companies_covered": 25,
+      "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
       "regions_covered": [
+        "US",
         "Europe"
       ],
       "sharpe_ratio": null,
@@ -204,9 +203,8 @@
       "quant_tools_used": null,
       "bullet_points": [
         "Analysed companies by reading financials & press release published by company, thoroughly understand the dynamics of the sector covered and understand the key drivers affecting a particular company for building better quality models.",
-        "Taking into account macro-economic factors for building the model by reading and having team discussions and build model whose final outcome is Required Business Performance (RBP) probability.",
         "Write earnings report for a company based on the outcome of the models build.",
-        "Tracking companies in the portfolio on a daily basis for related news & events and making adjustments to the models if some fundamental changes occur which affect the company’s key drivers of earnings and make adjustments for corporate actions completed by company in the portfolio."
+        "Tracking companies in the portfolio on a daily basis for related news & events and making adjustments to the models if some fundamental changes occur which affect the company’s key drivers of earnings."
       ]
     }
   ],
@@ -225,6 +223,6 @@
   "primary_sector": "Healthcare",
   "primary_strategy": "Fundamental",
   "primary_geography": "Asia-Pacific",
-  "current_level": "VP",
+  "current_level": "Director",
   "years_experience": 9
 }

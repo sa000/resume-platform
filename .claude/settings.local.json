@@ -7,7 +7,8 @@
       "Bash(python3:*)",
       "Bash(sqlite3:*)",
       "Bash(streamlit run:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

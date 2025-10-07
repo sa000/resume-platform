@@ -22,8 +22,7 @@
       "start": "Mar-01-2023",
       "end": null,
       "sectors": [
-        "Financials",
-        "Technology"
+        "Financials"
       ],
       "approach": "Fundamental",
       "client_type": "Buy-side",
@@ -83,8 +82,7 @@
       "end": "Aug-01-2021",
       "sectors": [
         "Consumer",
-        "Healthcare",
-        "Technology"
+        "Healthcare"
       ],
       "approach": "Fundamental",
       "client_type": "Buy-side",
@@ -106,7 +104,7 @@
       ]
     },
     {
-      "company": "J.P. Morgan",
+      "company": "J.P.Morgan",
       "title": "Analyst – Healthcare Investment Banking",
       "start": "Jul-01-2017",
       "end": "Jul-01-2019",
@@ -139,10 +137,10 @@
     "DCF",
     "Comparable Companies",
     "LBO",
-    "Primary Research",
     "Portfolio Management",
-    "Risk Management",
-    "Investment Analysis"
+    "Due Diligence",
+    "Investment Analysis",
+    "Risk Management"
   ],
   "certifications": [],
   "languages": [],

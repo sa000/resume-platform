@@ -1,7 +1,15 @@
 {
   "candidate_name": "Omar El-Hassan",
   "candidate_id": 8,
-  "timestamp": "2025-10-06T02:16:04.575834",
+  "timestamp": "2025-10-07T22:07:01.306236",
+  "completeness_score": 80.0,
+  "completeness_grade": "B",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin",
+    "certifications",
+    "performance_metrics"
+  ],
   "total_issues": 3,
   "issues_by_severity": {
     "critical": 0,

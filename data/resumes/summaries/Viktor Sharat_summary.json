@@ -1,18 +1,16 @@
 {
   "name": "Viktor Sharat",
-  "current_title": "Analyst",
+  "current_title": "Research Analyst",
   "current_company": "Axis Mutual Fund",
-  "years_experience": 8,
+  "years_experience": 9,
   "sector_focus": [
     "Healthcare",
     "Energy",
-    "Infrastructure",
-    "Logistics",
-    null
+    "Infrastructure"
   ],
   "investment_approach": "Fundamental",
   "primary_geography": "Asia-Pacific",
-  "summary_blurb": "Experienced research analyst with a strong focus on fundamental analysis across healthcare, energy, and infrastructure sectors. Proven track record of delivering comprehensive sector reports and maintaining active coverage of multiple stocks. Skilled in equity and market analysis, with a commitment to generating superior returns for institutional clients.",
+  "summary_blurb": "Viktor Sharat is an experienced Research Analyst with a strong focus on fundamental analysis across multiple sectors including healthcare and energy. He has a proven track record of delivering comprehensive sector reports and maintaining active coverage of numerous stocks. His analytical skills are complemented by a solid educational background in management and biotechnology.",
   "notable_experience": [
     "Axis Mutual Fund",
     "Meridian Capital",
@@ -23,7 +21,7 @@
     "Market Analysis",
     "Healthcare",
     "Renewable Energy",
-    "AI"
+    "Investment Research"
   ],
   "education_highlight": "PGDM from Mumbai Institute of Management Studies and Research",
   "certifications": [

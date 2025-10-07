@@ -1,7 +1,13 @@
 {
   "candidate_name": "Michael Rodriguez",
   "candidate_id": 5,
-  "timestamp": "2025-10-06T02:16:04.557782",
+  "timestamp": "2025-10-07T22:07:01.266451",
+  "completeness_score": 93.3,
+  "completeness_grade": "A",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin"
+  ],
   "total_issues": 7,
   "issues_by_severity": {
     "critical": 0,

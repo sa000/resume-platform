@@ -1,7 +1,13 @@
 {
   "candidate_name": "Vikram Shah",
   "candidate_id": 6,
-  "timestamp": "2025-10-06T02:16:04.563655",
+  "timestamp": "2025-10-07T22:07:01.278852",
+  "completeness_score": 93.3,
+  "completeness_grade": "A",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin"
+  ],
   "total_issues": 0,
   "issues_by_severity": {
     "critical": 0,

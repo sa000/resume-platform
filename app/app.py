@@ -1,42 +1,86 @@
+"""
+Talent Search Platform - Streamlit Application
+
+Main web application for searching and filtering hedge fund analyst candidates.
+Provides full-text search, multi-dimensional filtering, analytics visualizations,
+and detailed candidate profile views with resume preview.
+"""
+
 import streamlit as st
 import pandas as pd
 import sqlite3
 import plotly.express as px
 import pathlib
 import json
-import mimetypes
-import tempfile
 import base64
 import logging
 
 from docx import Document
-from utils.db import get_filter_values
 
 logger = logging.getLogger(__name__)
 
-# =============================
-# 🔧 CONFIG
-# =============================
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
 st.set_page_config(
     page_title="Talent Search Platform",
-    page_icon="🎯",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
 DB_PATH = pathlib.Path(__file__).parents[1] / "data/db/warehouse.db"
 
-# =============================
-# 🎨 CUSTOM STYLING
-# =============================
-# Load CSS from external file
+# Load custom CSS styling
 with open(pathlib.Path(__file__).parent / "styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# =============================
-# ⚙️ DATA LOADERS
-# =============================
-def load_candidates():
-    """Load candidates joined with aggregated skills, companies, and schools."""
+
+# =============================================================================
+# DATA LOADING FUNCTIONS
+# =============================================================================
+
+def get_filter_values(field_name: str) -> list:
+    """
+    Get unique filter values from pre-computed lookup table.
+
+    Uses indexed filter_values table for fast dropdown population.
+
+    Args:
+        field_name: Filter category (e.g., 'skill', 'company', 'geography')
+
+    Returns:
+        list: Sorted unique values
+    """
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT DISTINCT field_value
+            FROM filter_values
+            WHERE field_name = ?
+            ORDER BY field_value
+        """, (field_name,))
+
+        values = [row[0] for row in cur.fetchall()]
+        conn.close()
+        return values
+    except Exception as e:
+        logger.error(f"Failed to get filter values for {field_name}: {e}")
+        conn.close()
+        return []
+
+
+def load_candidates() -> pd.DataFrame:
+    """
+    Load all candidates with aggregated data.
+
+    Performs joins across candidates, skills, experiences, education,
+    and quality_scores tables to create a complete candidate view.
+
+    Returns:
+        pd.DataFrame: Candidates with all associated data
+    """
     conn = sqlite3.connect(DB_PATH)
     df = pd.read_sql_query("""
         SELECT
@@ -90,16 +134,19 @@ def load_candidates():
     return df
 
 
-def search_candidates(search_query: str):
+def search_candidates(search_query: str) -> pd.DataFrame:
     """
-    Full-text search across all candidate data using FTS5.
-    Returns candidates ranked by relevance with match information.
+    Full-text search using FTS5 with BM25 ranking.
+
+    Searches across names, titles, companies, skills, education, and
+    certifications. Returns results ranked by relevance.
 
     Args:
-        search_query: Search terms (supports phrases, AND/OR logic, prefix matching)
+        search_query: Search terms (supports Boolean operators, phrases, wildcards)
 
     Returns:
-        pandas.DataFrame: Matching candidates with all fields plus match_info column
+        pd.DataFrame: Matching candidates with match_info column
+        None: If search query is empty or search fails
     """
     if not search_query or search_query.strip() == "":
         return None  # Return None to indicate no search performed
@@ -178,34 +225,34 @@ def search_candidates(search_query: str):
 
             # Check each field for matches
             if row.get('fts_name') and query_lower in str(row['fts_name']).lower():
-                matches.append(f"👤 Name: {row['name']}")
+                matches.append(f" Name: {row['name']}")
 
             if row.get('fts_company') and query_lower in str(row['fts_company']).lower():
-                matches.append(f"🏢 Company: {row['current_company']}")
+                matches.append(f" Company: {row['current_company']}")
 
             if row.get('fts_title') and query_lower in str(row['fts_title']).lower():
-                matches.append(f"💼 Title: {row['current_title']}")
+                matches.append(f" Title: {row['current_title']}")
 
             if row.get('fts_skills') and query_lower in str(row['fts_skills']).lower():
                 # Find which skills matched
                 skills = str(row.get('all_skills', '')).split(',')
                 matched_skills = [s.strip() for s in skills if query_lower in s.lower()]
                 if matched_skills:
-                    matches.append(f"🧠 Skills: {', '.join(matched_skills[:3])}")
+                    matches.append(f" Skills: {', '.join(matched_skills[:3])}")
 
             if row.get('all_companies') and query_lower in str(row['all_companies']).lower():
                 companies = str(row['all_companies']).split(',')
                 matched_companies = [c.strip() for c in companies if query_lower in c.lower()]
                 if matched_companies and matched_companies[0] != row.get('current_company'):
-                    matches.append(f"🏦 Past Experience: {', '.join(matched_companies[:2])}")
+                    matches.append(f" Past Experience: {', '.join(matched_companies[:2])}")
 
             if row.get('fts_education') and query_lower in str(row['fts_education']).lower():
-                matches.append(f"🎓 Education matched")
+                matches.append(f" Education matched")
 
             if row.get('fts_certs') and query_lower in str(row['fts_certs']).lower():
-                matches.append(f"🏆 Certifications matched")
+                matches.append(f" Certifications matched")
 
-            return matches if matches else ["✨ Relevant match found"]
+            return matches if matches else [" Relevant match found"]
 
         df['match_info'] = df.apply(get_match_info, axis=1)
 
@@ -217,10 +264,12 @@ def search_candidates(search_query: str):
         return None
 
 
-def get_search_suggestions():
+def get_search_suggestions() -> list:
     """
-    Get common search terms for autocomplete/suggestions.
-    Returns popular companies, skills, degrees.
+    Get common search terms for autocomplete.
+
+    Returns:
+        list: Sorted list combining top companies, skills, and degrees
     """
     conn = sqlite3.connect(DB_PATH)
     suggestions = []
@@ -254,126 +303,123 @@ def get_search_suggestions():
     return sorted(set(suggestions))  # Remove duplicates and sort
 
 
-# =============================
-# 🎨 UI SETUP
-# =============================
+# =============================================================================
+# UI SETUP
+# =============================================================================
 st.markdown("""
     <div class="main-header">
-        <h1>🎯 Talent Search Platform</h1>
+        <h1> Talent Search Platform</h1>
         <p>Find the perfect candidates for your team with advanced filtering and search</p>
     </div>
 """, unsafe_allow_html=True)
 
 try:
     df = load_candidates()
-    all_skills = get_filter_values("skill", str(DB_PATH))
-    all_companies = get_filter_values("company", str(DB_PATH))
-    all_schools = get_filter_values("school", str(DB_PATH))
-    all_degrees = get_filter_values("degree", str(DB_PATH))
+    all_skills = get_filter_values("skill")
+    all_companies = get_filter_values("company")
+    all_schools = get_filter_values("school")
+    all_degrees = get_filter_values("degree")
 except Exception as e:
-    st.error(f"❌ Could not load data from database: {e}")
+    st.error(f" Could not load data from database: {e}")
     st.stop()
 
 if df.empty:
-    st.warning("⚠️ No candidate data found in warehouse.")
+    st.warning(" No candidate data found in warehouse.")
     st.stop()
 
-# =============================
-# 📌 SESSION STATE FOR FLAGGED CANDIDATES
-# =============================
-# Hard-coded job roles
+# =============================================================================
+# SESSION STATE
+# =============================================================================
 AVAILABLE_ROLES = ["Role 1", "Role 2", "Role 3"]
 
 if 'flagged_candidates' not in st.session_state:
-    # {candidate_id: [list of roles]}
-    st.session_state.flagged_candidates = {}
+    st.session_state.flagged_candidates = {}  # {candidate_id: [list of roles]}
 
-# =============================
-# 📑 TAB NAVIGATION
-# =============================
-tab1, tab2 = st.tabs(["🎯 Talent Search", "🚧 Work in Progress: Matching Jobs to Candidates"])
 
-# =============================
-# TAB 2: WORK IN PROGRESS - JOB MATCHING
-# =============================
+# =============================================================================
+# TAB NAVIGATION
+# =============================================================================
+tab1, tab2 = st.tabs([" Talent Search", " Work in Progress: Matching Jobs to Candidates"])
+
+# =============================================================================
+# TAB 2: JOB MATCHING (WORK IN PROGRESS)
+# =============================================================================
 with tab2:
-    st.markdown('<h2 class="section-header">🚧 Job-to-Candidate Matching (Work in Progress)</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header"> Job-to-Candidate Matching (Work in Progress)</h2>', unsafe_allow_html=True)
 
     st.info("""
-    **🔮 Coming Soon: Intelligent Job-to-Candidate Matching**
+    ** Coming Soon: Intelligent Job-to-Candidate Matching**
 
     We're building an advanced matching system that will revolutionize how you find the perfect candidate for each role!
     """)
 
     st.markdown("---")
-    st.markdown("### 📋 Select a Job Role")
+    st.markdown("###  Select a Job Role")
 
     col1, col2 = st.columns([1, 3])
 
     with col1:
-        if st.button("👨‍💼 Data Scientist: HM Sammie", type="primary", use_container_width=True):
+        if st.button(" Data Scientist: HM Sammie", type="primary", use_container_width=True):
             st.session_state.selected_job = "Data Scientist: HM Sammie"
 
     if st.session_state.get('selected_job'):
         st.markdown("---")
-        st.markdown("### 🎉 Match Results")
+        st.markdown("###  Match Results")
 
         # Joking message about the match
         st.success("""
-        **🏆 Best Candidate Found: Sakibul Alam**
+        ** Best Candidate Found: Sakibul Alam**
 
         *Congratulations! Our highly advanced AI algorithm (aka random selection) has determined that
-        Sakibul Alam is the perfect match for this role!* 😄
+        Sakibul Alam is the perfect match for this role!* 
 
         **Why?** Well... he's currently the only candidate in our system, so statistically speaking,
-        he's both the best AND worst match! 📊
+        he's both the best AND worst match! 
         """)
 
         st.markdown("---")
-        st.markdown("### 🔬 Future Improvements")
+        st.markdown("###  Future Improvements")
 
         st.markdown("""
         Once we move beyond our "pick the only candidate" algorithm, here's what we're planning:
 
-        #### 🎯 **Phase 1: Tag Extraction & Matching**
+        ####  **Phase 1: Tag Extraction & Matching**
         - **Skills Extraction**: Parse job descriptions to identify required technical skills (Python, SQL, Machine Learning, etc.)
         - **Role & Seniority Matching**: Extract role requirements (e.g., "Senior", "Lead", "Manager") and match to candidate experience levels
         - **Experience Requirements**: Identify years of experience, domain expertise, and industry background from JDs
         - **Education & Certifications**: Match degree requirements and professional certifications to candidate profiles
 
-        #### 📊 **Phase 2: Weighted Scoring System**
+        ####  **Phase 2: Weighted Scoring System**
         - Assign weights to different matching criteria (e.g., skills 40%, experience 30%, education 20%, culture fit 10%)
         - Calculate compatibility scores for each candidate
         - Rank candidates by overall match percentage
 
-        #### 🧠 **Phase 3: Semantic Matching with Embeddings**
+        ####  **Phase 3: Semantic Matching with Embeddings**
         - Use NLP embeddings (e.g., sentence transformers) to capture semantic similarity between JD text and resume content
         - Go beyond keyword matching to understand contextual fit
         - Identify candidates with transferable skills from adjacent domains
 
-        #### 🚀 **Phase 4: ML-Powered Recommendations**
+        ####  **Phase 4: ML-Powered Recommendations**
         - Learn from historical hiring decisions to improve matching accuracy
         - Predict candidate success likelihood based on role requirements
         - Provide explainable AI insights on why each candidate was matched
 
-        #### 💡 **Bonus Features**
+        ####  **Bonus Features**
         - **Gap Analysis**: Show what's missing from top candidates (e.g., "Strong match but lacks AWS certification")
         - **Diversity Insights**: Ensure balanced candidate pools across different backgrounds
         - **Market Benchmarking**: Compare candidate qualifications against industry standards
         """)
 
         st.markdown("---")
-        st.info("💬 **Stay tuned!** This is just a preview. Once implemented, you'll be able to upload job descriptions and get instant, intelligent candidate recommendations.")
+        st.info(" **Stay tuned!** This is just a preview. Once implemented, you'll be able to upload job descriptions and get instant, intelligent candidate recommendations.")
 
-# =============================
-# TAB 1: MAIN TALENT SEARCH
-# =============================
+# =============================================================================
+# TAB 1: TALENT SEARCH
+# =============================================================================
 with tab1:
-    # =============================
-    # 🎯 SIDEBAR - FLAGGED CANDIDATES SUMMARY
-    # =============================
+    # Sidebar: Flagged candidates summary
     with st.sidebar:
-        st.markdown("### 📌 Flagged Candidates by Role")
+        st.markdown("###  Flagged Candidates by Role")
 
         # Count candidates per role
         role_counts = {role: 0 for role in AVAILABLE_ROLES}
@@ -390,11 +436,9 @@ with tab1:
         total_flagged = len(st.session_state.flagged_candidates)
         st.metric("Total Candidates Flagged", total_flagged)
 
-    # =============================
-    # 📌 FLAGGED CANDIDATES REVIEW SECTION
-    # =============================
+    # Flagged candidates review section
     if st.session_state.flagged_candidates:
-        with st.expander("📌 Review Flagged Candidates", expanded=False):
+        with st.expander(" Review Flagged Candidates", expanded=False):
             # Create tabs for each role
             tabs = st.tabs(AVAILABLE_ROLES + ["All Flagged"])
 
@@ -448,14 +492,14 @@ with tab1:
 
 
 # =============================
-    # 📊 VISUALIZATIONS - MOVED TO TOP
+    #  VISUALIZATIONS - MOVED TO TOP
     # =============================
-    st.markdown('<h2 class="section-header">📊 Analytics & Insights</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header"> Analytics & Insights</h2>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2, gap="large")
 
     with col_a:
-        st.markdown("#### 🌍 Candidates by Geography")
+        st.markdown("####  Candidates by Geography")
         geo_counts = df["primary_geography"].value_counts().reset_index()
         geo_counts.columns = ["Geography", "Candidates"]
         fig_geo = px.bar(
@@ -480,7 +524,7 @@ with tab1:
         st.plotly_chart(fig_geo, use_container_width=True)
 
     with col_b:
-        st.markdown("#### 🏢 Candidates by Sector")
+        st.markdown("####  Candidates by Sector")
         sector_counts = df["primary_sector"].value_counts().reset_index()
         sector_counts.columns = ["Sector", "Candidates"]
         total_candidates = len(df)
@@ -511,7 +555,7 @@ with tab1:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    st.markdown("#### 📈 Candidates by Investment Approach")
+    st.markdown("####  Candidates by Investment Approach")
     approach_counts = df["investment_approach"].value_counts().reset_index()
     approach_counts.columns = ["Approach", "Candidates"]
     fig_approach = px.bar(
@@ -537,17 +581,15 @@ with tab1:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # =============================
-    # 🔍 FILTERS
-    # =============================
-    st.markdown('<h2 class="section-header">🔎 Search & Filter Candidates</h2>', unsafe_allow_html=True)
+    # Search and filters
+    st.markdown('<h2 class="section-header"> Search & Filter Candidates</h2>', unsafe_allow_html=True)
 
     # Initialize search in session state
     if 'search_query' not in st.session_state:
         st.session_state.search_query = ""
 
     # Search bar at top of filters
-    st.markdown("#### 🔍 Smart Search")
+    st.markdown("####  Smart Search")
     col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
 
     with col_search1:
@@ -561,40 +603,40 @@ with tab1:
         )
 
     with col_search2:
-        if st.button("🔍 Search", type="primary", width='stretch'):
+        if st.button(" Search", type="primary", width='stretch'):
             st.session_state.search_query = search_input
             st.rerun()
 
     with col_search3:
-        if st.button("🔄 Clear", type="secondary", width='stretch'):
+        if st.button(" Clear", type="secondary", width='stretch'):
             st.session_state.search_query = ""
             st.rerun()
 
     # Use the session state search query
     search_query = st.session_state.search_query
 
-    st.markdown("#### 🎛️ Additional Filters")
+    st.markdown("####  Additional Filters")
     col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     with col1:
-        geo = st.selectbox("🌍 Geographic Market", ["All"] + sorted(df["primary_geography"].dropna().unique().tolist()))
+        geo = st.selectbox(" Geographic Market", ["All"] + sorted(df["primary_geography"].dropna().unique().tolist()))
 
     with col2:
-        approach = st.selectbox("📈 Investment Approach", ["All"] + sorted(df["investment_approach"].dropna().unique().tolist()))
+        approach = st.selectbox(" Investment Approach", ["All"] + sorted(df["investment_approach"].dropna().unique().tolist()))
 
     with col3:
-        sector = st.selectbox("🏢 Sector", ["All"] + sorted(df["primary_sector"].dropna().unique().tolist()))
+        sector = st.selectbox(" Sector", ["All"] + sorted(df["primary_sector"].dropna().unique().tolist()))
 
     with col4:
-        education_degree = st.selectbox("🎓 Education", ["All"] + all_degrees)
+        education_degree = st.selectbox(" Education", ["All"] + all_degrees)
 
     with col5:
-        company = st.selectbox("🏦 Company (Any Past Employer)", ["All"] + all_companies)
+        company = st.selectbox(" Company (Any Past Employer)", ["All"] + all_companies)
 
     with col6:
-        school = st.selectbox("🏫 School", ["All"] + all_schools)
+        school = st.selectbox(" School", ["All"] + all_schools)
 
-    st.markdown("#### 🎯 Experience & Skills")
+    st.markdown("####  Experience & Skills")
     col7, col8 = st.columns([1, 2])
 
     with col7:
@@ -606,21 +648,18 @@ with tab1:
         )
 
     with col8:
-        selected_skills = st.multiselect("🧠 Skills", options=all_skills, placeholder="Choose skills...")
+        selected_skills = st.multiselect(" Skills", options=all_skills, placeholder="Choose skills...")
 
 
-    # =============================
-    # ⚙️ APPLY FILTERS
-    # =============================
-    # First, apply FTS5 search if query exists
+    # Apply search and filters
     if search_query and search_query.strip():
         search_results = search_candidates(search_query)
 
         if search_results is not None and not search_results.empty:
             filtered = search_results.copy()
-            st.success(f"✨ Found **{len(filtered)}** candidates matching: **{search_query}**")
+            st.success(f" Found **{len(filtered)}** candidates matching: **{search_query}**")
         else:
-            st.warning("❌ No candidates found matching your search query. Try different keywords.")
+            st.warning(" No candidates found matching your search query. Try different keywords.")
             filtered = pd.DataFrame()  # Empty dataframe
     else:
         # No search query - start with all candidates
@@ -668,26 +707,20 @@ with tab1:
             ]
 
 
-    # =============================
-    # 📋 RESULTS TABLE
-    # =============================
+    # Results summary table
     st.markdown("<br>", unsafe_allow_html=True)
-
-    # Show different header based on search vs filters
     if search_query and search_query.strip():
-        st.markdown(f'<h2 class="section-header">🔍 Search Results: {len(filtered)} Candidates</h2>', unsafe_allow_html=True)
+        st.markdown(f'<h2 class="section-header"> Search Results: {len(filtered)} Candidates</h2>', unsafe_allow_html=True)
         if len(filtered) > 0:
             st.caption(f"Showing results for '{search_query}' with applied filters")
     else:
-        st.markdown(f'<h2 class="section-header">👥 All Candidates: {len(filtered)} Found</h2>', unsafe_allow_html=True)
-
-    # Show count summary with color
+        st.markdown(f'<h2 class="section-header"> All Candidates: {len(filtered)} Found</h2>', unsafe_allow_html=True)
     if len(filtered) == 0:
-        st.warning("🔍 No candidates match your criteria. Try adjusting filters or search terms.")
+        st.warning(" No candidates match your criteria. Try adjusting filters or search terms.")
     elif len(filtered) < 5:
-        st.success(f"✅ Found {len(filtered)} highly relevant candidate(s)")
+        st.success(f" Found {len(filtered)} highly relevant candidate(s)")
     else:
-        st.info(f"📊 Showing {len(filtered)} matching candidates")
+        st.info(f" Showing {len(filtered)} matching candidates")
 
     cols = [
         "name",
@@ -698,15 +731,11 @@ with tab1:
         "primary_geography",
         "years_experience",
     ]
-
-    # Show summary table with better column names
     display_df = filtered[cols].copy()
     display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
     st.dataframe(display_df, width='stretch', hide_index=True)
 
-    st.markdown('<h2 class="section-header">📄 Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
-
-    # Auto-expand if search results and less than 5 candidates
+    st.markdown('<h2 class="section-header"> Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
     auto_expand = bool(search_query and search_query.strip() and len(filtered) <= 5)
 
     for idx, row in filtered.iterrows():
@@ -718,7 +747,7 @@ with tab1:
         if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
             match_badges = " • " + " • ".join(row['match_info'][:3])
 
-        with st.expander(f"📘 {row['name']} — {row['current_title']} at {row['current_company']}", expanded=auto_expand):
+        with st.expander(f" {row['name']} — {row['current_title']} at {row['current_company']}", expanded=auto_expand):
             # Create a nice header card
             col_left, col_right = st.columns([2, 1])
 
@@ -728,7 +757,7 @@ with tab1:
 
                 # Show what matched for this candidate
                 if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
-                    st.markdown("**🎯 Matched on:**")
+                    st.markdown("** Matched on:**")
                     for match in row['match_info']:
                         st.markdown(f"- {match}")
                     st.markdown("---")
@@ -739,45 +768,28 @@ with tab1:
             with col_right:
                 st.metric("Experience", f"{row['years_experience'] or 0} years")
 
-                # Quality Score Badge
-                if row.get('quality_score') is not None:
-                    score = row['quality_score']
-                    if score >= 90:
-                        badge_class = "badge-success"
-                        grade = "A"
-                    elif score >= 80:
-                        badge_class = "badge-primary"
-                        grade = "B"
-                    elif score >= 70:
-                        badge_class = "badge-info"
-                        grade = "C"
-                    else:
-                        badge_class = "badge"
-                        grade = "D"
-                    st.markdown(f'<span class="{badge_class}" style="font-size: 1rem;">Quality Score: {score:.0f}/100 ({grade})</span>', unsafe_allow_html=True)
-
             st.markdown("---")
 
             # Key details with badges
-            st.markdown("#### 📍 Key Details")
+            st.markdown("####  Key Details")
             details_col1, details_col2, details_col3 = st.columns(3)
 
             with details_col1:
-                st.markdown(f"**🌍 Geography**")
+                st.markdown(f"** Geography**")
                 st.markdown(f'<span class="badge badge-primary">{row["primary_geography"] or "N/A"}</span>', unsafe_allow_html=True)
 
             with details_col2:
-                st.markdown(f"**🏢 Sector**")
+                st.markdown(f"** Sector**")
                 st.markdown(f'<span class="badge badge-success">{row["primary_sector"] or "N/A"}</span>', unsafe_allow_html=True)
 
             with details_col3:
-                st.markdown(f"**📈 Investment Approach**")
+                st.markdown(f"** Investment Approach**")
                 st.markdown(f'<span class="badge badge-info">{row["investment_approach"] or "N/A"}</span>', unsafe_allow_html=True)
 
             st.markdown("<br>", unsafe_allow_html=True)
 
             # Detailed Experience Information
-            st.markdown("#### 💼 Detailed Experience")
+            st.markdown("#### Detailed Experience")
             conn_exp = sqlite3.connect(DB_PATH)
             experiences_df = pd.read_sql_query(
                 "SELECT * FROM experiences WHERE candidate_id = ? ORDER BY start_date DESC",
@@ -840,17 +852,17 @@ with tab1:
 
                         if exp.get('quant_tools_used'):
                             try:
-                                tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used'], str) else exp['quant_tools_used']
+                                tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used', str) else exp['quant_tools_used']
                                 if tools:
                                     st.markdown("**Quant Tools:**")
-                                    tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for t in tools])
+                                    tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for tools in tools])
                                     st.markdown(tools_html, unsafe_allow_html=True)
                             except:
                                 pass
 
             # Skills section with badges
             if row.get("all_skills"):
-                st.markdown("#### 🧠 Skills")
+                st.markdown("####  Skills")
                 skills_list = str(row['all_skills']).split(',')
                 skills_html = ''.join([f'<span class="badge badge-primary">{skill.strip()}</span>' for skill in skills_list[:15]])
                 st.markdown(skills_html, unsafe_allow_html=True)
@@ -859,7 +871,7 @@ with tab1:
 
             # Experience section
             if row.get("all_companies"):
-                st.markdown("#### 🏦 Past Companies")
+                st.markdown("####  Past Companies")
                 companies_list = str(row['all_companies']).split(',')
                 companies_html = ''.join([f'<span class="badge badge-info">{company.strip()}</span>' for company in companies_list[:10]])
                 st.markdown(companies_html, unsafe_allow_html=True)
@@ -868,7 +880,7 @@ with tab1:
 
             # Education section
             if row.get("all_schools"):
-                st.markdown("#### 🎓 Education")
+                st.markdown("####  Education")
                 schools_list = str(row['all_schools']).split(',')
                 schools_html = ''.join([f'<span class="badge badge-success">{school.strip()}</span>' for school in schools_list])
                 st.markdown(schools_html, unsafe_allow_html=True)
@@ -878,7 +890,7 @@ with tab1:
                 try:
                     certifications = json.loads(row['certifications']) if isinstance(row['certifications'], str) else row['certifications']
                     if certifications:
-                        st.markdown("#### 🏆 Certifications")
+                        st.markdown("####  Certifications")
                         certs_html = ''.join([f'<span class="badge badge-info">{cert}</span>' for cert in certifications])
                         st.markdown(certs_html, unsafe_allow_html=True)
                 except:
@@ -890,8 +902,8 @@ with tab1:
                 resume_path = pathlib.Path(row["resume_path"])
                 ext = resume_path.suffix.lower()
 
-                with st.expander("📄 View Resume"):
-                    # --- 1️⃣ If it's already a PDF ---
+                with st.expander(" View Resume"):
+                    # --- 1 If it's already a PDF ---
                     if ext == ".pdf":
                         with open(resume_path, "rb") as f:
                             base64_pdf = base64.b64encode(f.read()).decode("utf-8")
@@ -902,7 +914,7 @@ with tab1:
                         """
                         st.markdown(pdf_display, unsafe_allow_html=True)
 
-                    # --- 2️⃣ If it's a DOCX, display as formatted text ---
+                    # --- 2 If it's a DOCX, display as formatted text ---
                     elif ext in [".docx", ".doc"]:
                         try:
                             doc = Document(resume_path)
@@ -938,17 +950,17 @@ with tab1:
                             # Also provide download button
                             with open(resume_path, "rb") as f:
                                 st.download_button(
-                                    label="📥 Download DOCX",
+                                    label=" Download DOCX",
                                     data=f.read(),
                                     file_name=resume_path.name,
                                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                 )
                         except Exception as e:
-                            st.error(f"❌ Could not display DOCX: {e}")
+                            st.error(f" Could not display DOCX: {e}")
                             # Fallback: just provide download button
                             with open(resume_path, "rb") as f:
                                 st.download_button(
-                                    label="📥 Download Resume",
+                                    label=" Download Resume",
                                     data=f.read(),
                                     file_name=resume_path.name,
                                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -961,7 +973,7 @@ with tab1:
 
             # Flag for roles section - at the bottom after resume
             st.markdown("---")
-            st.markdown("#### 🏷️ Flag for Applicable Roles")
+            st.markdown("####  Flag for Applicable Roles")
 
             selected_roles = st.multiselect(
                 "Select roles this candidate is suitable for",
@@ -984,6 +996,6 @@ with tab1:
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("""
         <div style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid #e5e7eb;">
-            <p style="margin: 0;">🎯 Talent Search Platform | Built for finding exceptional candidates</p>
+            <p style="margin: 0;"> Talent Search Platform | Built for finding exceptional candidates</p>
         </div>
     """, unsafe_allow_html=True)

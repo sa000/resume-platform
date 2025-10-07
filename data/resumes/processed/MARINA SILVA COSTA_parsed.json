@@ -19,7 +19,7 @@
       "major": "Economics",
       "school": "Fundacao Getulio Vargas",
       "start": "Jan-01-2013",
-      "end": "Jan-01-2016",
+      "end": "Dec-01-2016",
       "honors": "Manager of CJE-FF – a student-run equity fund – and the Investment Committee"
     }
   ],
@@ -79,7 +79,7 @@
       "company": "Bain & Company",
       "title": "Business Analyst",
       "start": "Jan-01-2016",
-      "end": "Jan-01-2019",
+      "end": "Dec-01-2019",
       "sectors": [
         "Consumer"
       ],
@@ -124,5 +124,5 @@
   "primary_strategy": "Fundamental",
   "primary_geography": "US",
   "current_level": "Analyst",
-  "years_experience": 5
+  "years_experience": 4
 }

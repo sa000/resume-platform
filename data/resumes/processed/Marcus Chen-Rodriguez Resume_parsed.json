@@ -30,7 +30,7 @@
       "num_sectors_covered": 1,
       "coverage_value": "$40B",
       "regions_covered": [
-        "North America"
+        "US"
       ],
       "sharpe_ratio": null,
       "alpha": "340bps",
@@ -54,11 +54,11 @@
       ],
       "approach": "Fundamental",
       "client_type": "Buy-side",
-      "num_companies_covered": null,
-      "num_sectors_covered": null,
+      "num_companies_covered": 9,
+      "num_sectors_covered": 1,
       "coverage_value": "$18B",
       "regions_covered": [
-        "North America"
+        "US"
       ],
       "sharpe_ratio": null,
       "alpha": "280bps",
@@ -85,7 +85,7 @@
       "num_sectors_covered": null,
       "coverage_value": null,
       "regions_covered": [
-        "North America"
+        "US"
       ],
       "sharpe_ratio": null,
       "alpha": null,
@@ -107,7 +107,7 @@
       "num_sectors_covered": null,
       "coverage_value": "$12B+",
       "regions_covered": [
-        "North America"
+        "US"
       ],
       "sharpe_ratio": null,
       "alpha": null,

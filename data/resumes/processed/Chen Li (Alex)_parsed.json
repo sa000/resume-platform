@@ -12,7 +12,7 @@
       "school": "University of Hong Kong",
       "start": "Sept-01-2021",
       "end": "Jul-01-2023",
-      "honors": null
+      "honors": "Related Courses: Algorithmic Trading, Quantitative Risk Management, Machine Learning in Trading and Finance"
     },
     {
       "degree": "B.B.A.",
@@ -20,7 +20,7 @@
       "school": "University of Hong Kong",
       "start": "Sept-01-2017",
       "end": "Jul-01-2021",
-      "honors": null
+      "honors": "Related Courses: Econometrics, Statistics"
     }
   ],
   "experiences": [
@@ -82,7 +82,7 @@
         "DCF",
         "Relative Valuation"
       ],
-      "quant_tools_used": null,
+      "quant_tools_used": [],
       "bullet_points": [
         "Performed comprehensive research on Asian technology and healthcare sectors, covering 15+ sub-industries and 35+ companies across Greater China markets.",
         "Supported investment team by conducting expert interviews, analyzing financial statements, building DCF and relative valuation models, and preparing detailed investment research reports for portfolio review."

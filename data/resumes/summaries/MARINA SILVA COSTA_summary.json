@@ -1,8 +1,8 @@
 {
   "name": "Marina Silva Costa",
-  "current_title": "Analyst",
+  "current_title": "Equity Research Analyst",
   "current_company": "Vanguard Group",
-  "years_experience": 5,
+  "years_experience": 4,
   "sector_focus": [
     "Healthcare",
     "Consumer",
@@ -10,7 +10,7 @@
   ],
   "investment_approach": "Fundamental",
   "primary_geography": "US",
-  "summary_blurb": "Marina Silva Costa is an experienced analyst with a strong background in equity research and business analysis. She has developed investment recommendations through fundamental research and financial modeling, focusing on various sectors including healthcare and consumer. Her experience includes significant roles at Vanguard Group and Bain & Company.",
+  "summary_blurb": "Marina Silva Costa is an experienced Equity Research Analyst with a strong background in fundamental research and financial modeling. She has worked with notable firms such as Vanguard Group and Bain & Company, focusing on sectors including healthcare and consumer. Marina holds an MBA from MIT Sloan School of Management and has developed investment recommendations for publicly traded companies.",
   "notable_experience": [
     "Vanguard Group",
     "Bain & Company"
@@ -18,9 +18,7 @@
   "top_skills": [
     "Python",
     "R",
-    "Advanced Excel/VBA",
-    null,
-    null
+    "Advanced Excel/VBA"
   ],
   "education_highlight": "MBA in Business Administration from MIT Sloan School of Management",
   "certifications": [

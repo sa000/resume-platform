@@ -10,32 +10,32 @@
       "degree": "PGDM",
       "major": null,
       "school": "Mumbai Institute of Management Studies and Research",
-      "start": "01-01-2015",
-      "end": "01-01-2015",
+      "start": null,
+      "end": "Jan-01-2015",
       "honors": null
     },
     {
       "degree": "M.Tech(Integrated)",
       "major": null,
       "school": "Padmashree Dr.D.Y.Patil Institute of Biotechnology and Bioinformatics, Navi Mumbai",
-      "start": "01-01-2010",
-      "end": "01-01-2010",
+      "start": null,
+      "end": "Jan-01-2010",
       "honors": null
     },
     {
       "degree": "HSC",
       "major": null,
       "school": "Bharti Vidyapeeth junior college, Navi Mumbai",
-      "start": "01-01-2006",
-      "end": "01-01-2006",
+      "start": null,
+      "end": "Jan-01-2006",
       "honors": null
     },
     {
       "degree": "SSC",
       "major": null,
       "school": "Don Bosco High School, Navi Mumbai",
-      "start": "01-01-2004",
-      "end": "01-01-2004",
+      "start": null,
+      "end": "Jan-01-2004",
       "honors": null
     }
   ],
@@ -43,7 +43,7 @@
     {
       "company": "Axis Mutual Fund",
       "title": "Research Analyst",
-      "start": "01-01-2023",
+      "start": null,
       "end": null,
       "sectors": [
         "Healthcare"
@@ -58,8 +58,8 @@
       ],
       "sharpe_ratio": null,
       "alpha": null,
-      "valuation_methods_used": null,
-      "quant_tools_used": null,
+      "valuation_methods_used": [],
+      "quant_tools_used": [],
       "bullet_points": [
         "Tracked 38 companies within the healthcare fund portfolio and conducted meetings with various stakeholders (management teams, buy-side analysts) to provide strategic inputs to senior fund managers."
       ]
@@ -67,24 +67,22 @@
     {
       "company": "Meridian Capital",
       "title": "Research Analyst",
-      "start": "01-01-2022",
-      "end": "01-01-2023",
+      "start": null,
+      "end": null,
       "sectors": [
         "Energy",
         "Infrastructure"
       ],
       "approach": "Fundamental",
-      "client_type": "Buy-side",
+      "client_type": null,
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
-      "valuation_methods_used": null,
-      "quant_tools_used": null,
+      "valuation_methods_used": [],
+      "quant_tools_used": [],
       "bullet_points": [
         "Completed comprehensive sector report on renewable energy (~120 pages) within 3 months of joining and began receiving institutional votes within first quarter.",
         "Also published detailed analysis on Indian infrastructure sector.",
@@ -94,8 +92,8 @@
     {
       "company": "ICICI Securities Limited",
       "title": "Research Analyst",
-      "start": "01-01-2014",
-      "end": "01-01-2022",
+      "start": null,
+      "end": null,
       "sectors": [
         "Healthcare",
         "Energy",
@@ -106,13 +104,11 @@
       "num_companies_covered": 42,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
-      "valuation_methods_used": null,
-      "quant_tools_used": null,
+      "valuation_methods_used": [],
+      "quant_tools_used": [],
       "bullet_points": [
         "Maintained active coverage of 42 stocks across multiple sectors.",
         "Advanced from research associate to lead analyst within 3 years.",
@@ -123,8 +119,8 @@
     {
       "company": "BioAnalytics Research India Ltd.",
       "title": "Biomodeller Trainee",
-      "start": "01-01-2013",
-      "end": "01-01-2014",
+      "start": null,
+      "end": null,
       "sectors": null,
       "approach": null,
       "client_type": null,
@@ -134,8 +130,8 @@
       "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
-      "valuation_methods_used": null,
-      "quant_tools_used": null,
+      "valuation_methods_used": [],
+      "quant_tools_used": [],
       "bullet_points": [
         "Contributing member of team developing AI-based drug target identification system for precision medicine applications."
       ]
@@ -146,8 +142,8 @@
     "Market Analysis",
     "Healthcare",
     "Renewable Energy",
-    "AI",
-    "Machine Learning"
+    "Investment Research",
+    "AI-based Drug Target Identification"
   ],
   "certifications": [
     "Chartered Financial Analyst Level 3"
@@ -157,5 +153,5 @@
   "primary_strategy": "Fundamental",
   "primary_geography": "Asia-Pacific",
   "current_level": "Analyst",
-  "years_experience": 8
+  "years_experience": 9
 }

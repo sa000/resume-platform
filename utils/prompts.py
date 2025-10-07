@@ -1,4 +1,14 @@
-"""Prompts for LLM-based resume parsing."""
+"""
+LLM prompts for resume parsing and summarization.
+
+This module contains carefully engineered prompts for:
+- RESUME_PARSER_PROMPT: Full structured extraction from resume text
+- SUMMARY_PROMPT: Executive summary generation from parsed data
+
+Both prompts are optimized for hedge fund analyst recruiting,
+with specific guidance for normalizing investment approaches,
+geographies, sectors, and extracting performance metrics.
+"""
 
 RESUME_PARSER_PROMPT = """You are an expert resume parser supporting the Business Development (BD) team at a global hedge fund.
 The BD team sources and evaluates candidates across multiple geographies, investment approaches, and sectors

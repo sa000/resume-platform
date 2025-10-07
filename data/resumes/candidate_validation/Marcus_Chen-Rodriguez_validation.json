@@ -1,7 +1,14 @@
 {
   "candidate_name": "Marcus Chen-Rodriguez",
   "candidate_id": 7,
-  "timestamp": "2025-10-06T02:16:04.570026",
+  "timestamp": "2025-10-07T22:07:01.290734",
+  "completeness_score": 86.7,
+  "completeness_grade": "B",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin",
+    "certifications"
+  ],
   "total_issues": 2,
   "issues_by_severity": {
     "critical": 0,

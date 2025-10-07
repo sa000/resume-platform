@@ -18,24 +18,24 @@
       "degree": "M.B.B.S",
       "major": null,
       "school": "K.J. Somaiya Medical College, Mumbai",
-      "start": "Jan-01-2005",
-      "end": "Jan-01-2010",
+      "start": "Jan-01-2010",
+      "end": "Jan-01-2012",
       "honors": null
     },
     {
       "degree": "XII Std.",
       "major": null,
       "school": "Mithibai College, Mumbai",
-      "start": "Jan-01-2003",
-      "end": "Jan-01-2004",
+      "start": "Jan-01-2004",
+      "end": "Jan-01-2005",
       "honors": null
     },
     {
       "degree": "X Std.",
       "major": null,
       "school": "St. Xavier's High School, Mumbai",
-      "start": "Jan-01-2001",
-      "end": "Jan-01-2002",
+      "start": "Jan-01-2002",
+      "end": "Jan-01-2003",
       "honors": null
     }
   ],
@@ -77,9 +77,7 @@
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -102,9 +100,7 @@
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -119,24 +115,20 @@
       "title": "Manager – Equity Research",
       "start": "May-01-2015",
       "end": "Mar-31-2018",
-      "sectors": [
-        "Healthcare"
-      ],
-      "approach": "Fundamental",
-      "client_type": "Buy-side",
+      "sectors": null,
+      "approach": null,
+      "client_type": null,
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
       "quant_tools_used": null,
       "bullet_points": [
         "Member, U.S. Healthcare Services ER team (Institutional Investor (II) Runner up) at Leerink Partners",
-        "Awarded \"Excellence in Research\" recognition for superior analytical work and report quality (2015)"
+        "Awarded 'Excellence in Research' recognition for superior analytical work and report quality (2015)"
       ]
     },
     {
@@ -150,9 +142,7 @@
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Europe"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -174,9 +164,7 @@
       "num_companies_covered": null,
       "num_sectors_covered": null,
       "coverage_value": null,
-      "regions_covered": [
-        "Asia-Pacific"
-      ],
+      "regions_covered": null,
       "sharpe_ratio": null,
       "alpha": null,
       "valuation_methods_used": null,
@@ -207,6 +195,6 @@
   "primary_sector": "Healthcare",
   "primary_strategy": "Fundamental",
   "primary_geography": "Asia-Pacific",
-  "current_level": "Director",
+  "current_level": "Lead Analyst",
   "years_experience": 8
 }

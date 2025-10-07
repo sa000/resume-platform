@@ -1,7 +1,14 @@
 {
   "candidate_name": "Marina Silva Costa",
   "candidate_id": 4,
-  "timestamp": "2025-10-06T01:54:03.099853",
+  "timestamp": "2025-10-07T22:07:01.252076",
+  "completeness_score": 86.7,
+  "completeness_grade": "B",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin",
+    "performance_metrics"
+  ],
   "total_issues": 0,
   "issues_by_severity": {
     "critical": 0,

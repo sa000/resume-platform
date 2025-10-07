@@ -1,7 +1,14 @@
 {
   "candidate_name": "Chen Li",
   "candidate_id": 3,
-  "timestamp": "2025-10-06T02:16:04.543996",
+  "timestamp": "2025-10-07T22:07:01.240969",
+  "completeness_score": 86.7,
+  "completeness_grade": "B",
+  "missing_required": [],
+  "missing_optional": [
+    "linkedin",
+    "certifications"
+  ],
   "total_issues": 2,
   "issues_by_severity": {
     "critical": 0,

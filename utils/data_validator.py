@@ -1,19 +1,42 @@
 """
 Data quality validation for parsed resumes.
-Simple checks for missing data and formatting issues - no scoring.
+
+Provides:
+- Completeness scoring (0-100% with letter grades)
+- Format validation (dates, names, degrees)
+- Issue categorization (critical, formatting, warnings)
+- JSON validation reports
+
+Used during ingestion to track data quality and identify
+parsing issues for debugging.
 """
 
 import os
 import json
-from datetime import datetime
+import logging
 import re
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 VALIDATION_DIR = "data/resumes/candidate_validation"
 os.makedirs(VALIDATION_DIR, exist_ok=True)
 
 
-def is_title_case(name):
-    """Check if name is in proper Title Case."""
+def is_title_case(name: str) -> bool:
+    """
+    Check if name is in proper Title Case.
+
+    Validates that:
+    - Each word starts with a capital letter
+    - No words are in ALL CAPS (except single letters)
+
+    Args:
+        name: Name string to check
+
+    Returns:
+        bool: True if properly formatted, False otherwise
+    """
     if not name:
         return False
     words = name.split()
@@ -25,16 +48,48 @@ def is_title_case(name):
     return True
 
 
-def is_valid_date_format(date_str):
-    """Check if date is in MMM-DD-YYYY format."""
+def is_valid_date_format(date_str: str) -> bool:
+    """
+    Check if date string follows MMM-DD-YYYY format.
+
+    Accepts "Present" for current roles.
+
+    Args:
+        date_str: Date string to validate
+
+    Returns:
+        bool: True if valid format, False otherwise
+
+    Examples:
+        >>> is_valid_date_format("Jan-01-2023")
+        True
+        >>> is_valid_date_format("Present")
+        True
+        >>> is_valid_date_format("01/01/2023")
+        False
+    """
     if not date_str or date_str == "Present":
         return True
     pattern = r'^[A-Z][a-z]{2}-\d{2}-\d{4}$'
     return bool(re.match(pattern, str(date_str)))
 
 
-def is_valid_degree_format(degree):
-    """Check if degree follows standard format (B.S., MBA, Ph.D., etc.)."""
+def is_valid_degree_format(degree: str) -> bool:
+    """
+    Check if degree follows standard abbreviation format.
+
+    Accepts formats like:
+    - B.S., M.A., D.A. (single letter major)
+    - M.B.A., B.B.A. (multi-letter major)
+    - Ph.D., D.Phil., M.D., J.D. (special degrees)
+    - MBA, MFA, BBA (no periods)
+
+    Args:
+        degree: Degree string to validate
+
+    Returns:
+        bool: True if valid format, False otherwise
+    """
     if not degree:
         return False
     valid_patterns = [
@@ -48,16 +103,33 @@ def is_valid_degree_format(degree):
     return any(re.match(pattern, degree.strip()) for pattern in valid_patterns)
 
 
-def calculate_completeness_score(parsed_data, summary_data):
+def calculate_completeness_score(parsed_data: dict, summary_data: dict) -> tuple:
     """
-    Calculate a simple completeness score based on field presence.
+    Calculate data completeness score based on field presence.
+
+    Checks 15 fields total:
+    - 10 required: name, email, current_title, current_company, experience,
+                  education, skills, years_experience, primary_geography,
+                  investment_approach
+    - 5 optional: phone, location, linkedin, certifications, performance_metrics
+
+    Grading scale:
+    - A: 90-100%
+    - B: 80-89%
+    - C: 70-79%
+    - D: 60-69%
+    - F: <60%
+
+    Args:
+        parsed_data: Full parsed resume dictionary
+        summary_data: Candidate summary dictionary
 
     Returns:
         tuple: (score, grade, missing_required, missing_optional)
-        - score: 0-100 percentage
-        - grade: A/B/C/D/F letter grade
-        - missing_required: list of missing required fields
-        - missing_optional: list of missing optional fields
+            - score: Percentage (0-100)
+            - grade: Letter grade (A-F)
+            - missing_required: List of missing required field names
+            - missing_optional: List of missing optional field names
     """
     required_fields = {
         'name': bool(parsed_data.get('name')),
@@ -111,14 +183,26 @@ def calculate_completeness_score(parsed_data, summary_data):
     return score, grade, missing_required, missing_optional
 
 
-def validate_resume_data(parsed_data, summary_data):
+def validate_resume_data(parsed_data: dict, summary_data: dict) -> dict:
     """
     Validate resume data and identify quality issues.
 
-    Returns dict with three severity levels:
-    - critical: Missing important attributes
-    - formatting: Format/consistency issues
-    - warnings: Minor issues or missing optional data
+    Performs comprehensive validation checks:
+    - Critical: Missing required fields (name, email, title, company, experience)
+    - Formatting: Invalid formats (dates, names, degrees)
+    - Warnings: Missing optional fields (phone, location, skills)
+
+    Args:
+        parsed_data: Full parsed resume dictionary
+        summary_data: Candidate summary dictionary
+
+    Returns:
+        dict: Issues categorized by severity
+            {
+                "critical": [list of critical issues],
+                "formatting": [list of formatting issues],
+                "warnings": [list of warnings]
+            }
     """
     issues = {
         "critical": [],
@@ -201,11 +285,33 @@ def validate_resume_data(parsed_data, summary_data):
     return issues
 
 
-def save_validation_report(candidate_name, candidate_id, issues, parsed_data, summary_data,
-                          completeness_score=None, completeness_grade=None,
-                          missing_required=None, missing_optional=None):
+def save_validation_report(candidate_name: str, candidate_id: int, issues: dict,
+                          parsed_data: dict, summary_data: dict,
+                          completeness_score: float = None,
+                          completeness_grade: str = None,
+                          missing_required: list = None,
+                          missing_optional: list = None) -> str:
     """
-    Save validation report to JSON file with completeness metrics.
+    Save validation report to JSON file.
+
+    Creates a comprehensive validation report including:
+    - Completeness score and grade
+    - Missing required/optional fields
+    - All validation issues by severity
+
+    Args:
+        candidate_name: Candidate's name
+        candidate_id: Database ID
+        issues: Validation issues dictionary
+        parsed_data: Full parsed resume dictionary
+        summary_data: Candidate summary dictionary
+        completeness_score: Completeness percentage
+        completeness_grade: Letter grade
+        missing_required: List of missing required fields
+        missing_optional: List of missing optional fields
+
+    Returns:
+        str: Path to saved validation report
     """
     total_issues = len(issues["critical"]) + len(issues["formatting"]) + len(issues["warnings"])
 
@@ -233,5 +339,5 @@ def save_validation_report(candidate_name, candidate_id, issues, parsed_data, su
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ Validation report saved: {output_path}")
+    logger.debug(f"Validation report saved: {output_path}")
     return output_path
