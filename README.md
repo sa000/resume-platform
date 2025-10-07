@@ -17,16 +17,12 @@
 - [Technical Implementation](#technical-implementation)
 - [Future Enhancements](#future-enhancements)
 
-> **📚 Additional Documentation**:
-> - [QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md) - Commands, functions, and troubleshooting
-> - [WAREHOUSE_SCHEMA.md](docs/WAREHOUSE_SCHEMA.md) - Detailed database schema and query patterns
-
 ---
 
 ## Business Context
 
 ### The Challenge
-Millennium's Business Development team sources junior analyst talent across: This case study is limited to 10 resumes but in reality, they'll deal with thousdands of resumes and want a platform to find the right candidates for the right job as manually parsing through them is time consuming. 
+Millennium's Business Development has to comb through resumes to find promising candidates for their roles This case study is limited to 10 resumes but in reality, they'll deal with thousdands of resumes and want a platform to find the right candidates for the right job as manually parsing through them is time consuming. 
 
 ### The Solution
 A web app that allows the team to comb through through resumes with relevant filters such as sectors, education, experience. We'll use AI to help extract the data from the resumes into a backend can power the web app. 
@@ -36,7 +32,6 @@ A web app that allows the team to comb through through resumes with relevant fil
 
 ## Key Features
 
-### Resume Parsing Pipeline
 
 ### Search & Filtering
 - **Filters **:
@@ -265,19 +260,19 @@ Having the validation also helps to have data in a standaridzed way , such as ha
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                         DATA INGESTION PIPELINE                               │
-│                         (Case_Study.ipynb Cell 6 & 8)                         │
+│                         DATA INGESTION PIPELINE                              │
+│                         (Case_Study.ipynb)                                   │
 └──────────────────────────────────────────────────────────────────────────────┘
 
  INPUT: data/resumes/raw/*.{pdf,docx}
    │
    │
-   ├──────────── STEP 1: TEXT EXTRACTION ────────────┐
-   │                                                   │
-   │  ┌────────────────────┐    ┌─────────────────┐  │
-   │  │  PDF Resume        │    │  DOCX Resume    │  │
-   │  │  (PyPDF2)          │    │  (python-docx)  │  │
-   │  └────────┬───────────┘    └────────┬────────┘  │
+   ├──────────── STEP 1: TEXT EXTRACTION ────────────-
+   │                                                  │
+   │  ┌────────────────────┐    ┌─────────────────┐   │
+   │  │  PDF Resume        │    │  DOCX Resume    │   │
+   │  │  (PyPDF2)          │    │  (python-docx)  │   │
+   │  └────────┬───────────┘    └────────┬────────┘   │
    │           │                         │            │
    │           └──────────┬──────────────┘            │
    │                      │                           │
@@ -555,9 +550,7 @@ resume-platform/
 │   ├── WAREHOUSE_SCHEMA.md    # Detailed database schema and query patterns
 │   ├── QUICK_REFERENCE.md     # Commands, functions, and troubleshooting
 │   └── screenshots/           # Application screenshots for README
-│
-└── exports/                   # (Optional) CSV/Excel exports
-```
+│```
 
 ---
 
