@@ -117,6 +117,16 @@ def drop_and_create_tables(conn):
         FOREIGN KEY(candidate_id) REFERENCES candidates(id)
     );
 
+    CREATE TABLE filter_values (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        field_name TEXT NOT NULL,
+        field_value TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(field_name, field_value)
+    );
+
+    CREATE INDEX idx_filter_field ON filter_values(field_name);
+
     CREATE VIRTUAL TABLE candidates_fts USING fts5(
         candidate_id UNINDEXED,
         name,
@@ -244,9 +254,29 @@ def insert_skill(conn, candidate_id: int, skill: str):
 
 
 def insert_quality_score(conn, candidate_id: int, quality_score: float, grade: str,
-                        total_issues: int, issues: list, data_completeness: dict):
-    """Insert quality score record for a candidate."""
+                        total_issues: int, issues: dict, missing_required: list = None,
+                        missing_optional: list = None):
+    """
+    Insert quality score record for a candidate.
+
+    Args:
+        conn: Database connection
+        candidate_id: Candidate ID
+        quality_score: Completeness score (0-100)
+        grade: Letter grade (A-F)
+        total_issues: Total validation issues count
+        issues: Dict with critical, formatting, warnings lists
+        missing_required: List of missing required fields
+        missing_optional: List of missing optional fields
+    """
     cur = conn.cursor()
+
+    # Build data completeness dict
+    data_completeness = {
+        "missing_required": missing_required or [],
+        "missing_optional": missing_optional or []
+    }
+
     cur.execute("""
         INSERT INTO quality_scores (
             candidate_id, quality_score, grade, total_issues, issues, data_completeness, created_at
@@ -262,6 +292,84 @@ def insert_quality_score(conn, candidate_id: int, quality_score: float, grade: s
     ))
     conn.commit()
     return cur.lastrowid
+
+
+def insert_filter_value(conn, field_name: str, field_value: str):
+    """
+    Insert a single filter value into the filter_values table.
+    Uses INSERT OR IGNORE to automatically handle duplicates.
+
+    Args:
+        conn: Database connection
+        field_name: Name of the filter field (e.g., 'skill', 'company', 'geography')
+        field_value: Value to insert (e.g., 'Python', 'Goldman Sachs', 'US')
+    """
+    if not field_value or not str(field_value).strip():
+        return  # Skip empty/null values
+
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT OR IGNORE INTO filter_values (field_name, field_value, created_at)
+        VALUES (?, ?, ?)
+    """, (
+        field_name,
+        str(field_value).strip(),
+        datetime.utcnow().isoformat()
+    ))
+    conn.commit()
+
+
+def update_filter_values_for_candidate(conn, candidate_id: int, summary_data: dict, parsed_data: dict):
+    """
+    Extract and insert all filterable values from a candidate's data.
+    This populates the filter_values table for fast filter loading in the app.
+
+    Args:
+        conn: Database connection
+        candidate_id: ID of the candidate
+        summary_data: Candidate summary data
+        parsed_data: Parsed resume data
+    """
+    # Geography
+    if summary_data.get('primary_geography'):
+        insert_filter_value(conn, 'geography', summary_data['primary_geography'])
+
+    # Sector
+    if summary_data.get('sector_focus'):
+        # sector_focus can be a list, insert first one as primary
+        sectors = summary_data['sector_focus']
+        if isinstance(sectors, list) and len(sectors) > 0:
+            insert_filter_value(conn, 'sector', sectors[0])
+        elif isinstance(sectors, str):
+            insert_filter_value(conn, 'sector', sectors)
+
+    # Investment Approach
+    if summary_data.get('investment_approach'):
+        insert_filter_value(conn, 'approach', summary_data['investment_approach'])
+
+    # Skills
+    skills = summary_data.get('top_skills', []) or []
+    for skill in skills:
+        if skill:  # Skip None values
+            insert_filter_value(conn, 'skill', skill)
+
+    # Companies from experiences
+    experiences = parsed_data.get('experiences', []) or []
+    for exp in experiences:
+        company = exp.get('company')
+        if company:
+            insert_filter_value(conn, 'company', company)
+
+    # Schools and Degrees from education
+    education = parsed_data.get('education', []) or []
+    for edu in education:
+        school = edu.get('school')
+        degree = edu.get('degree')
+
+        if school:
+            insert_filter_value(conn, 'school', school)
+        if degree:
+            insert_filter_value(conn, 'degree', degree)
 
 
 def insert_to_fts(conn, candidate_id: int, parsed_data: dict, summary_data: dict):
@@ -377,6 +485,39 @@ def search_candidates(search_query: str, db_path: str = DB_PATH):
         logger.error(f"Search failed: {e}")
         conn.close()
         return None
+
+
+def get_filter_values(field_name: str, db_path: str = DB_PATH):
+    """
+    Fast retrieval of unique filter values for a given field.
+    Uses pre-computed filter_values table instead of scanning source tables.
+
+    Args:
+        field_name: Name of the filter field (e.g., 'skill', 'company', 'geography')
+        db_path: Path to database
+
+    Returns:
+        list: Sorted list of unique values for the specified field
+    """
+    conn = get_connection(db_path)
+
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT DISTINCT field_value
+            FROM filter_values
+            WHERE field_name = ?
+            ORDER BY field_value
+        """, (field_name,))
+
+        values = [row[0] for row in cur.fetchall()]
+        conn.close()
+        return values
+
+    except Exception as e:
+        logger.error(f"Failed to get filter values for {field_name}: {e}")
+        conn.close()
+        return []
 
 
 def get_search_suggestions(db_path: str = DB_PATH):

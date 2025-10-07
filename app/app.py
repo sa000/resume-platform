@@ -10,6 +10,7 @@ import base64
 import logging
 
 from docx import Document
+from utils.db import get_filter_values
 
 logger = logging.getLogger(__name__)
 
@@ -87,15 +88,6 @@ def load_candidates():
 
     df['highest_degree'] = df['all_degrees'].apply(get_highest_degree)
     return df
-
-
-def get_unique_values(table: str, column: str):
-    """Get unique values from a given table and column."""
-    conn = sqlite3.connect(DB_PATH)
-    q = f"SELECT DISTINCT {column} FROM {table} WHERE {column} IS NOT NULL AND {column} != '';"
-    df = pd.read_sql_query(q, conn)
-    conn.close()
-    return sorted(df[column].dropna().unique().tolist())
 
 
 def search_candidates(search_query: str):
@@ -274,10 +266,10 @@ st.markdown("""
 
 try:
     df = load_candidates()
-    all_skills = get_unique_values("skills", "skill")
-    all_companies = get_unique_values("experiences", "company")
-    all_schools = get_unique_values("education", "school")
-    all_degrees = get_unique_values("education", "degree")
+    all_skills = get_filter_values("skill", str(DB_PATH))
+    all_companies = get_filter_values("company", str(DB_PATH))
+    all_schools = get_filter_values("school", str(DB_PATH))
+    all_degrees = get_filter_values("degree", str(DB_PATH))
 except Exception as e:
     st.error(f"❌ Could not load data from database: {e}")
     st.stop()
@@ -297,102 +289,239 @@ if 'flagged_candidates' not in st.session_state:
     st.session_state.flagged_candidates = {}
 
 # =============================
-# 🎯 SIDEBAR - FLAGGED CANDIDATES SUMMARY
+# 📑 TAB NAVIGATION
 # =============================
-with st.sidebar:
-    st.markdown("### 📌 Flagged Candidates by Role")
+tab1, tab2 = st.tabs(["🎯 Talent Search", "🚧 Work in Progress: Matching Jobs to Candidates"])
 
-    # Count candidates per role
-    role_counts = {role: 0 for role in AVAILABLE_ROLES}
-    for candidate_id, roles in st.session_state.flagged_candidates.items():
-        for role in roles:
-            if role in role_counts:
-                role_counts[role] += 1
+# =============================
+# TAB 2: WORK IN PROGRESS - JOB MATCHING
+# =============================
+with tab2:
+    st.markdown('<h2 class="section-header">🚧 Job-to-Candidate Matching (Work in Progress)</h2>', unsafe_allow_html=True)
 
-    # Display counts
-    for role in AVAILABLE_ROLES:
-        st.metric(role, role_counts[role])
+    st.info("""
+    **🔮 Coming Soon: Intelligent Job-to-Candidate Matching**
+
+    We're building an advanced matching system that will revolutionize how you find the perfect candidate for each role!
+    """)
 
     st.markdown("---")
-    total_flagged = len(st.session_state.flagged_candidates)
-    st.metric("Total Candidates Flagged", total_flagged)
+    st.markdown("### 📋 Select a Job Role")
+
+    col1, col2 = st.columns([1, 3])
+
+    with col1:
+        if st.button("👨‍💼 Data Scientist: HM Sammie", type="primary", use_container_width=True):
+            st.session_state.selected_job = "Data Scientist: HM Sammie"
+
+    if st.session_state.get('selected_job'):
+        st.markdown("---")
+        st.markdown("### 🎉 Match Results")
+
+        # Joking message about the match
+        st.success("""
+        **🏆 Best Candidate Found: Sakibul Alam**
+
+        *Congratulations! Our highly advanced AI algorithm (aka random selection) has determined that
+        Sakibul Alam is the perfect match for this role!* 😄
+
+        **Why?** Well... he's currently the only candidate in our system, so statistically speaking,
+        he's both the best AND worst match! 📊
+        """)
+
+        st.markdown("---")
+        st.markdown("### 🔬 Future Improvements")
+
+        st.markdown("""
+        Once we move beyond our "pick the only candidate" algorithm, here's what we're planning:
+
+        #### 🎯 **Phase 1: Tag Extraction & Matching**
+        - **Skills Extraction**: Parse job descriptions to identify required technical skills (Python, SQL, Machine Learning, etc.)
+        - **Role & Seniority Matching**: Extract role requirements (e.g., "Senior", "Lead", "Manager") and match to candidate experience levels
+        - **Experience Requirements**: Identify years of experience, domain expertise, and industry background from JDs
+        - **Education & Certifications**: Match degree requirements and professional certifications to candidate profiles
+
+        #### 📊 **Phase 2: Weighted Scoring System**
+        - Assign weights to different matching criteria (e.g., skills 40%, experience 30%, education 20%, culture fit 10%)
+        - Calculate compatibility scores for each candidate
+        - Rank candidates by overall match percentage
+
+        #### 🧠 **Phase 3: Semantic Matching with Embeddings**
+        - Use NLP embeddings (e.g., sentence transformers) to capture semantic similarity between JD text and resume content
+        - Go beyond keyword matching to understand contextual fit
+        - Identify candidates with transferable skills from adjacent domains
+
+        #### 🚀 **Phase 4: ML-Powered Recommendations**
+        - Learn from historical hiring decisions to improve matching accuracy
+        - Predict candidate success likelihood based on role requirements
+        - Provide explainable AI insights on why each candidate was matched
+
+        #### 💡 **Bonus Features**
+        - **Gap Analysis**: Show what's missing from top candidates (e.g., "Strong match but lacks AWS certification")
+        - **Diversity Insights**: Ensure balanced candidate pools across different backgrounds
+        - **Market Benchmarking**: Compare candidate qualifications against industry standards
+        """)
+
+        st.markdown("---")
+        st.info("💬 **Stay tuned!** This is just a preview. Once implemented, you'll be able to upload job descriptions and get instant, intelligent candidate recommendations.")
 
 # =============================
-# 📌 FLAGGED CANDIDATES REVIEW SECTION
+# TAB 1: MAIN TALENT SEARCH
 # =============================
-if st.session_state.flagged_candidates:
-    with st.expander("📌 Review Flagged Candidates", expanded=False):
-        # Create tabs for each role
-        tabs = st.tabs(AVAILABLE_ROLES + ["All Flagged"])
+with tab1:
+    # =============================
+    # 🎯 SIDEBAR - FLAGGED CANDIDATES SUMMARY
+    # =============================
+    with st.sidebar:
+        st.markdown("### 📌 Flagged Candidates by Role")
 
-        for i, role in enumerate(AVAILABLE_ROLES):
-            with tabs[i]:
-                # Get candidates flagged for this role
-                role_candidate_ids = [cid for cid, roles in st.session_state.flagged_candidates.items() if role in roles]
+        # Count candidates per role
+        role_counts = {role: 0 for role in AVAILABLE_ROLES}
+        for candidate_id, roles in st.session_state.flagged_candidates.items():
+            for role in roles:
+                if role in role_counts:
+                    role_counts[role] += 1
 
-                if role_candidate_ids:
-                    role_candidates = df[df['id'].isin(role_candidate_ids)]
+        # Display counts
+        for role in AVAILABLE_ROLES:
+            st.metric(role, role_counts[role])
 
-                    for _, cand in role_candidates.iterrows():
+        st.markdown("---")
+        total_flagged = len(st.session_state.flagged_candidates)
+        st.metric("Total Candidates Flagged", total_flagged)
+
+    # =============================
+    # 📌 FLAGGED CANDIDATES REVIEW SECTION
+    # =============================
+    if st.session_state.flagged_candidates:
+        with st.expander("📌 Review Flagged Candidates", expanded=False):
+            # Create tabs for each role
+            tabs = st.tabs(AVAILABLE_ROLES + ["All Flagged"])
+
+            for i, role in enumerate(AVAILABLE_ROLES):
+                with tabs[i]:
+                    # Get candidates flagged for this role
+                    role_candidate_ids = [cid for cid, roles in st.session_state.flagged_candidates.items() if role in roles]
+
+                    if role_candidate_ids:
+                        role_candidates = df[df['id'].isin(role_candidate_ids)]
+
+                        for _, cand in role_candidates.iterrows():
+                            col1, col2, col3 = st.columns([3, 1, 1])
+                            with col1:
+                                st.markdown(f"**{cand['name']}** - {cand['current_title']} at {cand['current_company']}")
+                                # Show all roles this candidate is flagged for
+                                flagged_roles = st.session_state.flagged_candidates.get(cand['id'], [])
+                                roles_display = ", ".join(flagged_roles)
+                                st.caption(f"Flagged for: {roles_display}")
+                            with col2:
+                                st.caption(f"{cand['years_experience']} years exp")
+                            with col3:
+                                if st.button("Remove", key=f"remove_{role}_{cand['id']}"):
+                                    st.session_state.flagged_candidates[cand['id']].remove(role)
+                                    if not st.session_state.flagged_candidates[cand['id']]:
+                                        del st.session_state.flagged_candidates[cand['id']]
+                                    st.rerun()
+                    else:
+                        st.info(f"No candidates flagged for {role} yet.")
+
+            # All flagged tab
+            with tabs[-1]:
+                if st.session_state.flagged_candidates:
+                    all_flagged = df[df['id'].isin(st.session_state.flagged_candidates.keys())]
+
+                    for _, cand in all_flagged.iterrows():
                         col1, col2, col3 = st.columns([3, 1, 1])
                         with col1:
                             st.markdown(f"**{cand['name']}** - {cand['current_title']} at {cand['current_company']}")
-                            # Show all roles this candidate is flagged for
                             flagged_roles = st.session_state.flagged_candidates.get(cand['id'], [])
                             roles_display = ", ".join(flagged_roles)
                             st.caption(f"Flagged for: {roles_display}")
                         with col2:
                             st.caption(f"{cand['years_experience']} years exp")
                         with col3:
-                            if st.button("Remove", key=f"remove_{role}_{cand['id']}"):
-                                st.session_state.flagged_candidates[cand['id']].remove(role)
-                                if not st.session_state.flagged_candidates[cand['id']]:
-                                    del st.session_state.flagged_candidates[cand['id']]
+                            if st.button("Clear All", key=f"clear_all_{cand['id']}"):
+                                del st.session_state.flagged_candidates[cand['id']]
                                 st.rerun()
                 else:
-                    st.info(f"No candidates flagged for {role} yet.")
-
-        # All flagged tab
-        with tabs[-1]:
-            if st.session_state.flagged_candidates:
-                all_flagged = df[df['id'].isin(st.session_state.flagged_candidates.keys())]
-
-                for _, cand in all_flagged.iterrows():
-                    col1, col2, col3 = st.columns([3, 1, 1])
-                    with col1:
-                        st.markdown(f"**{cand['name']}** - {cand['current_title']} at {cand['current_company']}")
-                        flagged_roles = st.session_state.flagged_candidates.get(cand['id'], [])
-                        roles_display = ", ".join(flagged_roles)
-                        st.caption(f"Flagged for: {roles_display}")
-                    with col2:
-                        st.caption(f"{cand['years_experience']} years exp")
-                    with col3:
-                        if st.button("Clear All", key=f"clear_all_{cand['id']}"):
-                            del st.session_state.flagged_candidates[cand['id']]
-                            st.rerun()
-            else:
-                st.info("No flagged candidates yet.")
+                    st.info("No flagged candidates yet.")
 
 
 # =============================
-# 📊 VISUALIZATIONS - MOVED TO TOP
-# =============================
-st.markdown('<h2 class="section-header">📊 Analytics & Insights</h2>', unsafe_allow_html=True)
+    # 📊 VISUALIZATIONS - MOVED TO TOP
+    # =============================
+    st.markdown('<h2 class="section-header">📊 Analytics & Insights</h2>', unsafe_allow_html=True)
 
-col_a, col_b = st.columns(2, gap="large")
+    col_a, col_b = st.columns(2, gap="large")
 
-with col_a:
-    st.markdown("#### 🌍 Candidates by Geography")
-    geo_counts = df["primary_geography"].value_counts().reset_index()
-    geo_counts.columns = ["Geography", "Candidates"]
-    fig_geo = px.bar(
-        geo_counts,
-        x="Geography",
+    with col_a:
+        st.markdown("#### 🌍 Candidates by Geography")
+        geo_counts = df["primary_geography"].value_counts().reset_index()
+        geo_counts.columns = ["Geography", "Candidates"]
+        fig_geo = px.bar(
+            geo_counts,
+            x="Geography",
+            y="Candidates",
+            text="Candidates",
+            color_discrete_sequence=['#3b82f6']
+        )
+        fig_geo.update_layout(
+            showlegend=False,
+            template='plotly_dark',
+            plot_bgcolor='#1e293b',
+            paper_bgcolor='#1e293b',
+            yaxis_title="Number of Candidates",
+            xaxis=dict(showgrid=False),
+            yaxis=dict(showgrid=False),
+            font=dict(size=13),
+            margin=dict(l=50, r=50, t=50, b=50),
+            height=450
+        )
+        st.plotly_chart(fig_geo, use_container_width=True)
+
+    with col_b:
+        st.markdown("#### 🏢 Candidates by Sector")
+        sector_counts = df["primary_sector"].value_counts().reset_index()
+        sector_counts.columns = ["Sector", "Candidates"]
+        total_candidates = len(df)
+
+        fig_sector = px.pie(
+            sector_counts,
+            names="Sector",
+            values="Candidates",
+            hole=0.5,
+            color_discrete_sequence=px.colors.qualitative.Bold
+        )
+        fig_sector.update_layout(
+            template='plotly_dark',
+            plot_bgcolor='#1e293b',
+            paper_bgcolor='#1e293b',
+            font=dict(size=13),
+            margin=dict(l=50, r=50, t=50, b=50),
+            height=450,
+            annotations=[dict(
+                text=f'<b>{total_candidates}</b><br>Total',
+                x=0.5, y=0.5,
+                font_size=24,
+                showarrow=False,
+                font=dict(color='white')
+            )]
+        )
+        st.plotly_chart(fig_sector, use_container_width=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    st.markdown("#### 📈 Candidates by Investment Approach")
+    approach_counts = df["investment_approach"].value_counts().reset_index()
+    approach_counts.columns = ["Approach", "Candidates"]
+    fig_approach = px.bar(
+        approach_counts,
+        x="Approach",
         y="Candidates",
         text="Candidates",
-        color_discrete_sequence=['#3b82f6']
+        color_discrete_sequence=['#8b5cf6']
     )
-    fig_geo.update_layout(
+    fig_approach.update_layout(
         showlegend=False,
         template='plotly_dark',
         plot_bgcolor='#1e293b',
@@ -404,513 +533,457 @@ with col_a:
         margin=dict(l=50, r=50, t=50, b=50),
         height=450
     )
-    st.plotly_chart(fig_geo, use_container_width=True)
+    st.plotly_chart(fig_approach, use_container_width=True)
 
-with col_b:
-    st.markdown("#### 🏢 Candidates by Sector")
-    sector_counts = df["primary_sector"].value_counts().reset_index()
-    sector_counts.columns = ["Sector", "Candidates"]
-    total_candidates = len(df)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
-    fig_sector = px.pie(
-        sector_counts,
-        names="Sector",
-        values="Candidates",
-        hole=0.5,
-        color_discrete_sequence=px.colors.qualitative.Bold
-    )
-    fig_sector.update_layout(
-        template='plotly_dark',
-        plot_bgcolor='#1e293b',
-        paper_bgcolor='#1e293b',
-        font=dict(size=13),
-        margin=dict(l=50, r=50, t=50, b=50),
-        height=450,
-        annotations=[dict(
-            text=f'<b>{total_candidates}</b><br>Total',
-            x=0.5, y=0.5,
-            font_size=24,
-            showarrow=False,
-            font=dict(color='white')
-        )]
-    )
-    st.plotly_chart(fig_sector, use_container_width=True)
+    # =============================
+    # 🔍 FILTERS
+    # =============================
+    st.markdown('<h2 class="section-header">🔎 Search & Filter Candidates</h2>', unsafe_allow_html=True)
 
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-st.markdown("#### 📈 Candidates by Investment Approach")
-approach_counts = df["investment_approach"].value_counts().reset_index()
-approach_counts.columns = ["Approach", "Candidates"]
-fig_approach = px.bar(
-    approach_counts,
-    x="Approach",
-    y="Candidates",
-    text="Candidates",
-    color_discrete_sequence=['#8b5cf6']
-)
-fig_approach.update_layout(
-    showlegend=False,
-    template='plotly_dark',
-    plot_bgcolor='#1e293b',
-    paper_bgcolor='#1e293b',
-    yaxis_title="Number of Candidates",
-    xaxis=dict(showgrid=False),
-    yaxis=dict(showgrid=False),
-    font=dict(size=13),
-    margin=dict(l=50, r=50, t=50, b=50),
-    height=450
-)
-st.plotly_chart(fig_approach, use_container_width=True)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-# =============================
-# 🔍 FILTERS
-# =============================
-st.markdown('<h2 class="section-header">🔎 Search & Filter Candidates</h2>', unsafe_allow_html=True)
-
-# Initialize search in session state
-if 'search_query' not in st.session_state:
-    st.session_state.search_query = ""
-
-# Search bar at top of filters
-st.markdown("#### 🔍 Smart Search")
-col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
-
-with col_search1:
-    search_input = st.text_input(
-        "Search across all candidate data",
-        value=st.session_state.search_query,
-        placeholder="e.g., 'Goldman Sachs', 'Python machine learning', 'PhD', 'CFA', 'quantitative'...",
-        help="Live search across names, companies, skills, education, certifications, and experience",
-        label_visibility="collapsed",
-        key="search_input_field"
-    )
-
-with col_search2:
-    if st.button("🔍 Search", type="primary", width='stretch'):
-        st.session_state.search_query = search_input
-        st.rerun()
-
-with col_search3:
-    if st.button("🔄 Clear", type="secondary", width='stretch'):
+    # Initialize search in session state
+    if 'search_query' not in st.session_state:
         st.session_state.search_query = ""
-        st.rerun()
 
-# Use the session state search query
-search_query = st.session_state.search_query
+    # Search bar at top of filters
+    st.markdown("#### 🔍 Smart Search")
+    col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
 
-st.markdown("#### 🎛️ Additional Filters")
-col1, col2, col3, col4, col5, col6 = st.columns(6)
-
-with col1:
-    geo = st.selectbox("🌍 Geographic Market", ["All"] + sorted(df["primary_geography"].dropna().unique().tolist()))
-
-with col2:
-    approach = st.selectbox("📈 Investment Approach", ["All"] + sorted(df["investment_approach"].dropna().unique().tolist()))
-
-with col3:
-    sector = st.selectbox("🏢 Sector", ["All"] + sorted(df["primary_sector"].dropna().unique().tolist()))
-
-with col4:
-    education_degree = st.selectbox("🎓 Education", ["All"] + all_degrees)
-
-with col5:
-    company = st.selectbox("🏦 Company (Any Past Employer)", ["All"] + all_companies)
-
-with col6:
-    school = st.selectbox("🏫 School", ["All"] + all_schools)
-
-st.markdown("#### 🎯 Experience & Skills")
-col7, col8 = st.columns([1, 2])
-
-with col7:
-    min_exp, max_exp = st.slider(
-        "Years of Experience",
-        min_value=0,
-        max_value=int(df["years_experience"].max() or 20),
-        value=(0, int(df["years_experience"].max() or 20)),
-    )
-
-with col8:
-    selected_skills = st.multiselect("🧠 Skills", options=all_skills, placeholder="Choose skills...")
-
-
-# =============================
-# ⚙️ APPLY FILTERS
-# =============================
-# First, apply FTS5 search if query exists
-if search_query and search_query.strip():
-    search_results = search_candidates(search_query)
-
-    if search_results is not None and not search_results.empty:
-        filtered = search_results.copy()
-        st.success(f"✨ Found **{len(filtered)}** candidates matching: **{search_query}**")
-    else:
-        st.warning("❌ No candidates found matching your search query. Try different keywords.")
-        filtered = pd.DataFrame()  # Empty dataframe
-else:
-    # No search query - start with all candidates
-    filtered = df.copy()
-
-# Apply additional filters on top of search results (if any)
-if not filtered.empty:
-    # Filter by geography
-    if geo != "All":
-        filtered = filtered[filtered["primary_geography"] == geo]
-
-    # Filter by investment approach
-    if approach != "All":
-        filtered = filtered[filtered["investment_approach"] == approach]
-
-    # Filter by sector
-    if sector != "All":
-        filtered = filtered[filtered["primary_sector"] == sector]
-
-    # Filter by education degree
-    if education_degree != "All":
-        filtered = filtered[
-            filtered["all_degrees"].apply(lambda x: education_degree in str(x) if x else False)
-        ]
-
-    # Filter by experience range
-    filtered = filtered[(filtered["years_experience"] >= min_exp) & (filtered["years_experience"] <= max_exp)]
-
-    # Filter by company
-    if company != "All":
-        filtered = filtered[
-            filtered["all_companies"].apply(lambda x: company.lower() in str(x).lower() if x else False)
-        ]
-
-    # Filter by school
-    if school != "All":
-        filtered = filtered[
-            filtered["all_schools"].apply(lambda x: school.lower() in str(x).lower() if x else False)
-        ]
-
-    # Match any selected skill
-    if selected_skills:
-        filtered = filtered[
-            filtered["all_skills"].apply(lambda x: any(skill.lower() in str(x).lower() for skill in selected_skills))
-        ]
-
-
-# =============================
-# 📋 RESULTS TABLE
-# =============================
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Show different header based on search vs filters
-if search_query and search_query.strip():
-    st.markdown(f'<h2 class="section-header">🔍 Search Results: {len(filtered)} Candidates</h2>', unsafe_allow_html=True)
-    if len(filtered) > 0:
-        st.caption(f"Showing results for '{search_query}' with applied filters")
-else:
-    st.markdown(f'<h2 class="section-header">👥 All Candidates: {len(filtered)} Found</h2>', unsafe_allow_html=True)
-
-# Show count summary with color
-if len(filtered) == 0:
-    st.warning("🔍 No candidates match your criteria. Try adjusting filters or search terms.")
-elif len(filtered) < 5:
-    st.success(f"✅ Found {len(filtered)} highly relevant candidate(s)")
-else:
-    st.info(f"📊 Showing {len(filtered)} matching candidates")
-
-cols = [
-    "name",
-    "current_title",
-    "current_company",
-    "primary_sector",
-    "investment_approach",
-    "primary_geography",
-    "years_experience",
-]
-
-# Show summary table with better column names
-display_df = filtered[cols].copy()
-display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
-st.dataframe(display_df, width='stretch', hide_index=True)
-
-st.markdown('<h2 class="section-header">📄 Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
-
-# Auto-expand if search results and less than 5 candidates
-auto_expand = bool(search_query and search_query.strip() and len(filtered) <= 5)
-
-for idx, row in filtered.iterrows():
-    candidate_id = row['id']
-    current_roles = st.session_state.flagged_candidates.get(candidate_id, [])
-
-    # Show match info if this is from a search
-    match_badges = ""
-    if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
-        match_badges = " • " + " • ".join(row['match_info'][:3])
-
-    with st.expander(f"📘 {row['name']} — {row['current_title']} at {row['current_company']}", expanded=auto_expand):
-        # Create a nice header card
-        col_left, col_right = st.columns([2, 1])
-
-        with col_left:
-            st.markdown(f"### {row['name']}")
-            st.markdown(f"**{row['current_title']}** at **{row['current_company']}**")
-
-            # Show what matched for this candidate
-            if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
-                st.markdown("**🎯 Matched on:**")
-                for match in row['match_info']:
-                    st.markdown(f"- {match}")
-                st.markdown("---")
-
-            if row.get('summary_blurb'):
-                st.markdown(f"*{row['summary_blurb']}*")
-
-        with col_right:
-            st.metric("Experience", f"{row['years_experience'] or 0} years")
-
-            # Quality Score Badge
-            if row.get('quality_score') is not None:
-                score = row['quality_score']
-                if score >= 90:
-                    badge_class = "badge-success"
-                    grade = "A"
-                elif score >= 80:
-                    badge_class = "badge-primary"
-                    grade = "B"
-                elif score >= 70:
-                    badge_class = "badge-info"
-                    grade = "C"
-                else:
-                    badge_class = "badge"
-                    grade = "D"
-                st.markdown(f'<span class="{badge_class}" style="font-size: 1rem;">Quality Score: {score:.0f}/100 ({grade})</span>', unsafe_allow_html=True)
-
-        st.markdown("---")
-
-        # Key details with badges
-        st.markdown("#### 📍 Key Details")
-        details_col1, details_col2, details_col3 = st.columns(3)
-
-        with details_col1:
-            st.markdown(f"**🌍 Geography**")
-            st.markdown(f'<span class="badge badge-primary">{row["primary_geography"] or "N/A"}</span>', unsafe_allow_html=True)
-
-        with details_col2:
-            st.markdown(f"**🏢 Sector**")
-            st.markdown(f'<span class="badge badge-success">{row["primary_sector"] or "N/A"}</span>', unsafe_allow_html=True)
-
-        with details_col3:
-            st.markdown(f"**📈 Investment Approach**")
-            st.markdown(f'<span class="badge badge-info">{row["investment_approach"] or "N/A"}</span>', unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # Detailed Experience Information
-        st.markdown("#### 💼 Detailed Experience")
-        conn_exp = sqlite3.connect(DB_PATH)
-        experiences_df = pd.read_sql_query(
-            "SELECT * FROM experiences WHERE candidate_id = ? ORDER BY start_date DESC",
-            conn_exp,
-            params=(row['id'],)
+    with col_search1:
+        search_input = st.text_input(
+            "Search across all candidate data",
+            value=st.session_state.search_query,
+            placeholder="e.g., 'Goldman Sachs', 'Python machine learning', 'PhD', 'CFA', 'quantitative'...",
+            help="Live search across names, companies, skills, education, certifications, and experience",
+            label_visibility="collapsed",
+            key="search_input_field"
         )
-        conn_exp.close()
 
-        if not experiences_df.empty:
-            for _, exp in experiences_df.iterrows():
-                with st.expander(f"**{exp['company']}** - {exp['title']}"):
-                    exp_col1, exp_col2 = st.columns(2)
+    with col_search2:
+        if st.button("🔍 Search", type="primary", width='stretch'):
+            st.session_state.search_query = search_input
+            st.rerun()
 
-                    with exp_col1:
-                        if exp.get('sectors'):
-                            try:
-                                sectors = json.loads(exp['sectors']) if isinstance(exp['sectors'], str) else exp['sectors']
-                                if sectors:
-                                    st.markdown("**Sectors Covered:**")
-                                    sectors_html = ''.join([f'<span class="badge badge-success">{s}</span>' for s in sectors])
-                                    st.markdown(sectors_html, unsafe_allow_html=True)
-                            except:
-                                pass
+    with col_search3:
+        if st.button("🔄 Clear", type="secondary", width='stretch'):
+            st.session_state.search_query = ""
+            st.rerun()
 
-                        if exp.get('client_type'):
-                            st.markdown(f"**Client Type:** {exp['client_type']}")
+    # Use the session state search query
+    search_query = st.session_state.search_query
 
-                        if exp.get('num_companies_covered'):
-                            st.markdown(f"**Companies Covered:** {exp['num_companies_covered']}")
+    st.markdown("#### 🎛️ Additional Filters")
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
 
-                        if exp.get('coverage_value'):
-                            st.markdown(f"**Coverage/AUM:** {exp['coverage_value']}")
+    with col1:
+        geo = st.selectbox("🌍 Geographic Market", ["All"] + sorted(df["primary_geography"].dropna().unique().tolist()))
 
-                    with exp_col2:
-                        if exp.get('regions_covered'):
-                            try:
-                                regions = json.loads(exp['regions_covered']) if isinstance(exp['regions_covered'], str) else exp['regions_covered']
-                                if regions:
-                                    st.markdown("**Regions Covered:**")
-                                    regions_html = ''.join([f'<span class="badge badge-info">{r}</span>' for r in regions])
-                                    st.markdown(regions_html, unsafe_allow_html=True)
-                            except:
-                                pass
+    with col2:
+        approach = st.selectbox("📈 Investment Approach", ["All"] + sorted(df["investment_approach"].dropna().unique().tolist()))
 
-                        if exp.get('sharpe_ratio'):
-                            st.markdown(f"**Sharpe Ratio:** {exp['sharpe_ratio']}")
+    with col3:
+        sector = st.selectbox("🏢 Sector", ["All"] + sorted(df["primary_sector"].dropna().unique().tolist()))
 
-                        if exp.get('alpha'):
-                            st.markdown(f"**Alpha:** {exp['alpha']}")
+    with col4:
+        education_degree = st.selectbox("🎓 Education", ["All"] + all_degrees)
 
-                    if exp.get('valuation_methods_used'):
-                        try:
-                            methods = json.loads(exp['valuation_methods_used']) if isinstance(exp['valuation_methods_used'], str) else exp['valuation_methods_used']
-                            if methods:
-                                st.markdown("**Valuation Methods:**")
-                                methods_html = ''.join([f'<span class="badge badge-primary">{m}</span>' for m in methods])
-                                st.markdown(methods_html, unsafe_allow_html=True)
-                        except:
-                            pass
+    with col5:
+        company = st.selectbox("🏦 Company (Any Past Employer)", ["All"] + all_companies)
 
-                    if exp.get('quant_tools_used'):
-                        try:
-                            tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used'], str) else exp['quant_tools_used']
-                            if tools:
-                                st.markdown("**Quant Tools:**")
-                                tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for t in tools])
-                                st.markdown(tools_html, unsafe_allow_html=True)
-                        except:
-                            pass
+    with col6:
+        school = st.selectbox("🏫 School", ["All"] + all_schools)
 
-        # Skills section with badges
-        if row.get("all_skills"):
-            st.markdown("#### 🧠 Skills")
-            skills_list = str(row['all_skills']).split(',')
-            skills_html = ''.join([f'<span class="badge badge-primary">{skill.strip()}</span>' for skill in skills_list[:15]])
-            st.markdown(skills_html, unsafe_allow_html=True)
-            if len(skills_list) > 15:
-                st.caption(f"+ {len(skills_list) - 15} more skills")
+    st.markdown("#### 🎯 Experience & Skills")
+    col7, col8 = st.columns([1, 2])
 
-        # Experience section
-        if row.get("all_companies"):
-            st.markdown("#### 🏦 Past Companies")
-            companies_list = str(row['all_companies']).split(',')
-            companies_html = ''.join([f'<span class="badge badge-info">{company.strip()}</span>' for company in companies_list[:10]])
-            st.markdown(companies_html, unsafe_allow_html=True)
-            if len(companies_list) > 10:
-                st.caption(f"+ {len(companies_list) - 10} more companies")
+    with col7:
+        min_exp, max_exp = st.slider(
+            "Years of Experience",
+            min_value=0,
+            max_value=int(df["years_experience"].max() or 20),
+            value=(0, int(df["years_experience"].max() or 20)),
+        )
 
-        # Education section
-        if row.get("all_schools"):
-            st.markdown("#### 🎓 Education")
-            schools_list = str(row['all_schools']).split(',')
-            schools_html = ''.join([f'<span class="badge badge-success">{school.strip()}</span>' for school in schools_list])
-            st.markdown(schools_html, unsafe_allow_html=True)
+    with col8:
+        selected_skills = st.multiselect("🧠 Skills", options=all_skills, placeholder="Choose skills...")
 
-        # Certifications section
-        if row.get("certifications"):
-            try:
-                certifications = json.loads(row['certifications']) if isinstance(row['certifications'], str) else row['certifications']
-                if certifications:
-                    st.markdown("#### 🏆 Certifications")
-                    certs_html = ''.join([f'<span class="badge badge-info">{cert}</span>' for cert in certifications])
-                    st.markdown(certs_html, unsafe_allow_html=True)
-            except:
-                pass
 
-        st.write("---")
+    # =============================
+    # ⚙️ APPLY FILTERS
+    # =============================
+    # First, apply FTS5 search if query exists
+    if search_query and search_query.strip():
+        search_results = search_candidates(search_query)
 
-        if row.get("resume_path") and pathlib.Path(row["resume_path"]).exists():
-            resume_path = pathlib.Path(row["resume_path"])
-            ext = resume_path.suffix.lower()
-
-            with st.expander("📄 View Resume"):
-                # --- 1️⃣ If it's already a PDF ---
-                if ext == ".pdf":
-                    with open(resume_path, "rb") as f:
-                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                    pdf_display = f"""
-                        <iframe src="data:application/pdf;base64,{base64_pdf}"
-                                width="100%" height="800px" type="application/pdf">
-                        </iframe>
-                    """
-                    st.markdown(pdf_display, unsafe_allow_html=True)
-
-                # --- 2️⃣ If it's a DOCX, display as formatted text ---
-                elif ext in [".docx", ".doc"]:
-                    try:
-                        doc = Document(resume_path)
-
-                        # Extract text with basic formatting
-                        resume_html = '<div style="background-color: white; padding: 20px; border-radius: 5px; color: black;">'
-
-                        for paragraph in doc.paragraphs:
-                            if paragraph.text.strip():
-                                # Detect headings by font size or bold
-                                is_bold = any(run.bold for run in paragraph.runs if run.text.strip())
-                                font_size = max((run.font.size.pt if run.font.size else 11) for run in paragraph.runs if run.text.strip()) if paragraph.runs else 11
-
-                                if font_size > 13 or (is_bold and len(paragraph.text) < 100):
-                                    resume_html += f'<h3 style="color: #1f77b4; margin-top: 15px;">{paragraph.text}</h3>'
-                                else:
-                                    resume_html += f'<p style="margin: 5px 0;">{paragraph.text}</p>'
-
-                        # Add tables if any
-                        for table in doc.tables:
-                            resume_html += '<table style="width: 100%; border-collapse: collapse; margin: 10px 0;">'
-                            for row_table in table.rows:
-                                resume_html += '<tr>'
-                                for cell in row_table.cells:
-                                    resume_html += f'<td style="border: 1px solid #ddd; padding: 8px;">{cell.text}</td>'
-                                resume_html += '</tr>'
-                            resume_html += '</table>'
-
-                        resume_html += '</div>'
-
-                        st.markdown(resume_html, unsafe_allow_html=True)
-
-                        # Also provide download button
-                        with open(resume_path, "rb") as f:
-                            st.download_button(
-                                label="📥 Download DOCX",
-                                data=f.read(),
-                                file_name=resume_path.name,
-                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            )
-                    except Exception as e:
-                        st.error(f"❌ Could not display DOCX: {e}")
-                        # Fallback: just provide download button
-                        with open(resume_path, "rb") as f:
-                            st.download_button(
-                                label="📥 Download Resume",
-                                data=f.read(),
-                                file_name=resume_path.name,
-                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            )
-
-                else:
-                    st.info(f"Unsupported file type: {ext}")
+        if search_results is not None and not search_results.empty:
+            filtered = search_results.copy()
+            st.success(f"✨ Found **{len(filtered)}** candidates matching: **{search_query}**")
         else:
-            st.info("No resume file available for this candidate.")
+            st.warning("❌ No candidates found matching your search query. Try different keywords.")
+            filtered = pd.DataFrame()  # Empty dataframe
+    else:
+        # No search query - start with all candidates
+        filtered = df.copy()
 
-        # Flag for roles section - at the bottom after resume
-        st.markdown("---")
-        st.markdown("#### 🏷️ Flag for Applicable Roles")
+    # Apply additional filters on top of search results (if any)
+    if not filtered.empty:
+        # Filter by geography
+        if geo != "All":
+            filtered = filtered[filtered["primary_geography"] == geo]
 
-        selected_roles = st.multiselect(
-            "Select roles this candidate is suitable for",
-            options=AVAILABLE_ROLES,
-            default=current_roles,
-            key=f"roles_{candidate_id}",
-            help="Flag this candidate for one or more job roles"
-        )
+        # Filter by investment approach
+        if approach != "All":
+            filtered = filtered[filtered["investment_approach"] == approach]
 
-        # Auto-save when selection changes
-        if selected_roles != current_roles:
-            if selected_roles:
-                st.session_state.flagged_candidates[candidate_id] = selected_roles
+        # Filter by sector
+        if sector != "All":
+            filtered = filtered[filtered["primary_sector"] == sector]
+
+        # Filter by education degree
+        if education_degree != "All":
+            filtered = filtered[
+                filtered["all_degrees"].apply(lambda x: education_degree in str(x) if x else False)
+            ]
+
+        # Filter by experience range
+        filtered = filtered[(filtered["years_experience"] >= min_exp) & (filtered["years_experience"] <= max_exp)]
+
+        # Filter by company
+        if company != "All":
+            filtered = filtered[
+                filtered["all_companies"].apply(lambda x: company.lower() in str(x).lower() if x else False)
+            ]
+
+        # Filter by school
+        if school != "All":
+            filtered = filtered[
+                filtered["all_schools"].apply(lambda x: school.lower() in str(x).lower() if x else False)
+            ]
+
+        # Match any selected skill
+        if selected_skills:
+            filtered = filtered[
+                filtered["all_skills"].apply(lambda x: any(skill.lower() in str(x).lower() for skill in selected_skills))
+            ]
+
+
+    # =============================
+    # 📋 RESULTS TABLE
+    # =============================
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Show different header based on search vs filters
+    if search_query and search_query.strip():
+        st.markdown(f'<h2 class="section-header">🔍 Search Results: {len(filtered)} Candidates</h2>', unsafe_allow_html=True)
+        if len(filtered) > 0:
+            st.caption(f"Showing results for '{search_query}' with applied filters")
+    else:
+        st.markdown(f'<h2 class="section-header">👥 All Candidates: {len(filtered)} Found</h2>', unsafe_allow_html=True)
+
+    # Show count summary with color
+    if len(filtered) == 0:
+        st.warning("🔍 No candidates match your criteria. Try adjusting filters or search terms.")
+    elif len(filtered) < 5:
+        st.success(f"✅ Found {len(filtered)} highly relevant candidate(s)")
+    else:
+        st.info(f"📊 Showing {len(filtered)} matching candidates")
+
+    cols = [
+        "name",
+        "current_title",
+        "current_company",
+        "primary_sector",
+        "investment_approach",
+        "primary_geography",
+        "years_experience",
+    ]
+
+    # Show summary table with better column names
+    display_df = filtered[cols].copy()
+    display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
+    st.dataframe(display_df, width='stretch', hide_index=True)
+
+    st.markdown('<h2 class="section-header">📄 Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
+
+    # Auto-expand if search results and less than 5 candidates
+    auto_expand = bool(search_query and search_query.strip() and len(filtered) <= 5)
+
+    for idx, row in filtered.iterrows():
+        candidate_id = row['id']
+        current_roles = st.session_state.flagged_candidates.get(candidate_id, [])
+
+        # Show match info if this is from a search
+        match_badges = ""
+        if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
+            match_badges = " • " + " • ".join(row['match_info'][:3])
+
+        with st.expander(f"📘 {row['name']} — {row['current_title']} at {row['current_company']}", expanded=auto_expand):
+            # Create a nice header card
+            col_left, col_right = st.columns([2, 1])
+
+            with col_left:
+                st.markdown(f"### {row['name']}")
+                st.markdown(f"**{row['current_title']}** at **{row['current_company']}**")
+
+                # Show what matched for this candidate
+                if search_query and search_query.strip() and 'match_info' in row and row['match_info']:
+                    st.markdown("**🎯 Matched on:**")
+                    for match in row['match_info']:
+                        st.markdown(f"- {match}")
+                    st.markdown("---")
+
+                if row.get('summary_blurb'):
+                    st.markdown(f"*{row['summary_blurb']}*")
+
+            with col_right:
+                st.metric("Experience", f"{row['years_experience'] or 0} years")
+
+                # Quality Score Badge
+                if row.get('quality_score') is not None:
+                    score = row['quality_score']
+                    if score >= 90:
+                        badge_class = "badge-success"
+                        grade = "A"
+                    elif score >= 80:
+                        badge_class = "badge-primary"
+                        grade = "B"
+                    elif score >= 70:
+                        badge_class = "badge-info"
+                        grade = "C"
+                    else:
+                        badge_class = "badge"
+                        grade = "D"
+                    st.markdown(f'<span class="{badge_class}" style="font-size: 1rem;">Quality Score: {score:.0f}/100 ({grade})</span>', unsafe_allow_html=True)
+
+            st.markdown("---")
+
+            # Key details with badges
+            st.markdown("#### 📍 Key Details")
+            details_col1, details_col2, details_col3 = st.columns(3)
+
+            with details_col1:
+                st.markdown(f"**🌍 Geography**")
+                st.markdown(f'<span class="badge badge-primary">{row["primary_geography"] or "N/A"}</span>', unsafe_allow_html=True)
+
+            with details_col2:
+                st.markdown(f"**🏢 Sector**")
+                st.markdown(f'<span class="badge badge-success">{row["primary_sector"] or "N/A"}</span>', unsafe_allow_html=True)
+
+            with details_col3:
+                st.markdown(f"**📈 Investment Approach**")
+                st.markdown(f'<span class="badge badge-info">{row["investment_approach"] or "N/A"}</span>', unsafe_allow_html=True)
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # Detailed Experience Information
+            st.markdown("#### 💼 Detailed Experience")
+            conn_exp = sqlite3.connect(DB_PATH)
+            experiences_df = pd.read_sql_query(
+                "SELECT * FROM experiences WHERE candidate_id = ? ORDER BY start_date DESC",
+                conn_exp,
+                params=(row['id'],)
+            )
+            conn_exp.close()
+
+            if not experiences_df.empty:
+                for _, exp in experiences_df.iterrows():
+                    with st.expander(f"**{exp['company']}** - {exp['title']}"):
+                        exp_col1, exp_col2 = st.columns(2)
+
+                        with exp_col1:
+                            if exp.get('sectors'):
+                                try:
+                                    sectors = json.loads(exp['sectors']) if isinstance(exp['sectors'], str) else exp['sectors']
+                                    if sectors:
+                                        st.markdown("**Sectors Covered:**")
+                                        sectors_html = ''.join([f'<span class="badge badge-success">{s}</span>' for s in sectors])
+                                        st.markdown(sectors_html, unsafe_allow_html=True)
+                                except:
+                                    pass
+
+                            if exp.get('client_type'):
+                                st.markdown(f"**Client Type:** {exp['client_type']}")
+
+                            if exp.get('num_companies_covered'):
+                                st.markdown(f"**Companies Covered:** {exp['num_companies_covered']}")
+
+                            if exp.get('coverage_value'):
+                                st.markdown(f"**Coverage/AUM:** {exp['coverage_value']}")
+
+                        with exp_col2:
+                            if exp.get('regions_covered'):
+                                try:
+                                    regions = json.loads(exp['regions_covered']) if isinstance(exp['regions_covered'], str) else exp['regions_covered']
+                                    if regions:
+                                        st.markdown("**Regions Covered:**")
+                                        regions_html = ''.join([f'<span class="badge badge-info">{r}</span>' for r in regions])
+                                        st.markdown(regions_html, unsafe_allow_html=True)
+                                except:
+                                    pass
+
+                            if exp.get('sharpe_ratio'):
+                                st.markdown(f"**Sharpe Ratio:** {exp['sharpe_ratio']}")
+
+                            if exp.get('alpha'):
+                                st.markdown(f"**Alpha:** {exp['alpha']}")
+
+                        if exp.get('valuation_methods_used'):
+                            try:
+                                methods = json.loads(exp['valuation_methods_used']) if isinstance(exp['valuation_methods_used'], str) else exp['valuation_methods_used']
+                                if methods:
+                                    st.markdown("**Valuation Methods:**")
+                                    methods_html = ''.join([f'<span class="badge badge-primary">{m}</span>' for m in methods])
+                                    st.markdown(methods_html, unsafe_allow_html=True)
+                            except:
+                                pass
+
+                        if exp.get('quant_tools_used'):
+                            try:
+                                tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used'], str) else exp['quant_tools_used']
+                                if tools:
+                                    st.markdown("**Quant Tools:**")
+                                    tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for t in tools])
+                                    st.markdown(tools_html, unsafe_allow_html=True)
+                            except:
+                                pass
+
+            # Skills section with badges
+            if row.get("all_skills"):
+                st.markdown("#### 🧠 Skills")
+                skills_list = str(row['all_skills']).split(',')
+                skills_html = ''.join([f'<span class="badge badge-primary">{skill.strip()}</span>' for skill in skills_list[:15]])
+                st.markdown(skills_html, unsafe_allow_html=True)
+                if len(skills_list) > 15:
+                    st.caption(f"+ {len(skills_list) - 15} more skills")
+
+            # Experience section
+            if row.get("all_companies"):
+                st.markdown("#### 🏦 Past Companies")
+                companies_list = str(row['all_companies']).split(',')
+                companies_html = ''.join([f'<span class="badge badge-info">{company.strip()}</span>' for company in companies_list[:10]])
+                st.markdown(companies_html, unsafe_allow_html=True)
+                if len(companies_list) > 10:
+                    st.caption(f"+ {len(companies_list) - 10} more companies")
+
+            # Education section
+            if row.get("all_schools"):
+                st.markdown("#### 🎓 Education")
+                schools_list = str(row['all_schools']).split(',')
+                schools_html = ''.join([f'<span class="badge badge-success">{school.strip()}</span>' for school in schools_list])
+                st.markdown(schools_html, unsafe_allow_html=True)
+
+            # Certifications section
+            if row.get("certifications"):
+                try:
+                    certifications = json.loads(row['certifications']) if isinstance(row['certifications'], str) else row['certifications']
+                    if certifications:
+                        st.markdown("#### 🏆 Certifications")
+                        certs_html = ''.join([f'<span class="badge badge-info">{cert}</span>' for cert in certifications])
+                        st.markdown(certs_html, unsafe_allow_html=True)
+                except:
+                    pass
+
+            st.write("---")
+
+            if row.get("resume_path") and pathlib.Path(row["resume_path"]).exists():
+                resume_path = pathlib.Path(row["resume_path"])
+                ext = resume_path.suffix.lower()
+
+                with st.expander("📄 View Resume"):
+                    # --- 1️⃣ If it's already a PDF ---
+                    if ext == ".pdf":
+                        with open(resume_path, "rb") as f:
+                            base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+                        pdf_display = f"""
+                            <iframe src="data:application/pdf;base64,{base64_pdf}"
+                                    width="100%" height="800px" type="application/pdf">
+                            </iframe>
+                        """
+                        st.markdown(pdf_display, unsafe_allow_html=True)
+
+                    # --- 2️⃣ If it's a DOCX, display as formatted text ---
+                    elif ext in [".docx", ".doc"]:
+                        try:
+                            doc = Document(resume_path)
+
+                            # Extract text with basic formatting
+                            resume_html = '<div style="background-color: white; padding: 20px; border-radius: 5px; color: black;">'
+
+                            for paragraph in doc.paragraphs:
+                                if paragraph.text.strip():
+                                    # Detect headings by font size or bold
+                                    is_bold = any(run.bold for run in paragraph.runs if run.text.strip())
+                                    font_size = max((run.font.size.pt if run.font.size else 11) for run in paragraph.runs if run.text.strip()) if paragraph.runs else 11
+
+                                    if font_size > 13 or (is_bold and len(paragraph.text) < 100):
+                                        resume_html += f'<h3 style="color: #1f77b4; margin-top: 15px;">{paragraph.text}</h3>'
+                                    else:
+                                        resume_html += f'<p style="margin: 5px 0;">{paragraph.text}</p>'
+
+                            # Add tables if any
+                            for table in doc.tables:
+                                resume_html += '<table style="width: 100%; border-collapse: collapse; margin: 10px 0;">'
+                                for row_table in table.rows:
+                                    resume_html += '<tr>'
+                                    for cell in row_table.cells:
+                                        resume_html += f'<td style="border: 1px solid #ddd; padding: 8px;">{cell.text}</td>'
+                                    resume_html += '</tr>'
+                                resume_html += '</table>'
+
+                            resume_html += '</div>'
+
+                            st.markdown(resume_html, unsafe_allow_html=True)
+
+                            # Also provide download button
+                            with open(resume_path, "rb") as f:
+                                st.download_button(
+                                    label="📥 Download DOCX",
+                                    data=f.read(),
+                                    file_name=resume_path.name,
+                                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                )
+                        except Exception as e:
+                            st.error(f"❌ Could not display DOCX: {e}")
+                            # Fallback: just provide download button
+                            with open(resume_path, "rb") as f:
+                                st.download_button(
+                                    label="📥 Download Resume",
+                                    data=f.read(),
+                                    file_name=resume_path.name,
+                                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                )
+
+                    else:
+                        st.info(f"Unsupported file type: {ext}")
             else:
-                # Remove if no roles selected
-                if candidate_id in st.session_state.flagged_candidates:
-                    del st.session_state.flagged_candidates[candidate_id]
+                st.info("No resume file available for this candidate.")
 
-# Footer
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("""
-    <div style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid #e5e7eb;">
-        <p style="margin: 0;">🎯 Talent Search Platform | Built for finding exceptional candidates</p>
-    </div>
-""", unsafe_allow_html=True)
+            # Flag for roles section - at the bottom after resume
+            st.markdown("---")
+            st.markdown("#### 🏷️ Flag for Applicable Roles")
+
+            selected_roles = st.multiselect(
+                "Select roles this candidate is suitable for",
+                options=AVAILABLE_ROLES,
+                default=current_roles,
+                key=f"roles_{candidate_id}",
+                help="Flag this candidate for one or more job roles"
+            )
+
+            # Auto-save when selection changes
+            if selected_roles != current_roles:
+                if selected_roles:
+                    st.session_state.flagged_candidates[candidate_id] = selected_roles
+                else:
+                    # Remove if no roles selected
+                    if candidate_id in st.session_state.flagged_candidates:
+                        del st.session_state.flagged_candidates[candidate_id]
+
+    # Footer
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("""
+        <div style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid #e5e7eb;">
+            <p style="margin: 0;">🎯 Talent Search Platform | Built for finding exceptional candidates</p>
+        </div>
+    """, unsafe_allow_html=True)

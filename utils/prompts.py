@@ -172,6 +172,8 @@ Follow these rules carefully:
 - Remove ALL titles (Dr., Mr., Mrs., Ms.), designations (CFA, PhD, MBA, etc.), and nicknames in parentheses like (Alex) or (Jake) from the name.
 - Only include the person's actual first and last name in the "name" field.
 - Keep the "summary_blurb" professional and concise (3–5 sentences max).
+- Extract "current_title" from the most recent experience (experiences[0].title). If experiences array is empty or title is null, set to null.
+- Extract "current_company" from the most recent experience (experiences[0].company). If experiences array is empty or company is null, set to null.
 - Capture the candidate's sector focus from their experience (e.g., Healthcare, Technology, Credit, Energy).
 - Identify investment approach (Fundamental, Quantitative, or Hybrid) from the parsed data.
 - Use the years_experience from the parsed data.
@@ -185,8 +187,8 @@ Follow these rules carefully:
 Output Schema:
 {{
   "name": "string or null",
-  "current_title": "string or null",
-  "current_company": "string or null",
+  "current_title": "Most recent job title from experiences[0].title or null",
+  "current_company": "Most recent company from experiences[0].company or null",
   "years_experience": "int or null",
   "sector_focus": ["list of sectors or null"],
   "investment_approach": "Fundamental | Quantitative | Hybrid | null",

@@ -48,6 +48,69 @@ def is_valid_degree_format(degree):
     return any(re.match(pattern, degree.strip()) for pattern in valid_patterns)
 
 
+def calculate_completeness_score(parsed_data, summary_data):
+    """
+    Calculate a simple completeness score based on field presence.
+
+    Returns:
+        tuple: (score, grade, missing_required, missing_optional)
+        - score: 0-100 percentage
+        - grade: A/B/C/D/F letter grade
+        - missing_required: list of missing required fields
+        - missing_optional: list of missing optional fields
+    """
+    required_fields = {
+        'name': bool(parsed_data.get('name')),
+        'email': bool(parsed_data.get('email')),
+        'current_title': bool(summary_data.get('current_title')),
+        'current_company': bool(summary_data.get('current_company')),
+        'experience': bool(parsed_data.get('experiences') and len(parsed_data.get('experiences', [])) > 0),
+        'education': bool(parsed_data.get('education') and len(parsed_data.get('education', [])) > 0),
+        'skills': bool(parsed_data.get('skills') and len(parsed_data.get('skills', [])) > 0),
+        'years_experience': bool(summary_data.get('years_experience')),
+        'primary_geography': bool(summary_data.get('primary_geography')),
+        'investment_approach': bool(summary_data.get('investment_approach'))
+    }
+
+    optional_fields = {
+        'phone': bool(parsed_data.get('phone')),
+        'location': bool(parsed_data.get('location')),
+        'linkedin': bool(parsed_data.get('linkedin')),
+        'certifications': bool(summary_data.get('certifications') and len(summary_data.get('certifications', [])) > 0),
+        'performance_metrics': any(
+            exp.get('sharpe_ratio') or exp.get('alpha') or exp.get('coverage_value')
+            for exp in parsed_data.get('experiences', [])
+        )
+    }
+
+    # Count present fields
+    required_present = sum(1 for v in required_fields.values() if v)
+    optional_present = sum(1 for v in optional_fields.values() if v)
+    total_present = required_present + optional_present
+    total_fields = len(required_fields) + len(optional_fields)
+
+    # Calculate percentage
+    score = round((total_present / total_fields) * 100, 1)
+
+    # Assign grade
+    if score >= 90:
+        grade = "A"
+    elif score >= 80:
+        grade = "B"
+    elif score >= 70:
+        grade = "C"
+    elif score >= 60:
+        grade = "D"
+    else:
+        grade = "F"
+
+    # List missing fields
+    missing_required = [field for field, present in required_fields.items() if not present]
+    missing_optional = [field for field, present in optional_fields.items() if not present]
+
+    return score, grade, missing_required, missing_optional
+
+
 def validate_resume_data(parsed_data, summary_data):
     """
     Validate resume data and identify quality issues.
@@ -138,9 +201,11 @@ def validate_resume_data(parsed_data, summary_data):
     return issues
 
 
-def save_validation_report(candidate_name, candidate_id, issues, parsed_data, summary_data):
+def save_validation_report(candidate_name, candidate_id, issues, parsed_data, summary_data,
+                          completeness_score=None, completeness_grade=None,
+                          missing_required=None, missing_optional=None):
     """
-    Save validation report to JSON file.
+    Save validation report to JSON file with completeness metrics.
     """
     total_issues = len(issues["critical"]) + len(issues["formatting"]) + len(issues["warnings"])
 
@@ -148,6 +213,10 @@ def save_validation_report(candidate_name, candidate_id, issues, parsed_data, su
         "candidate_name": candidate_name,
         "candidate_id": candidate_id,
         "timestamp": datetime.utcnow().isoformat(),
+        "completeness_score": completeness_score,
+        "completeness_grade": completeness_grade,
+        "missing_required": missing_required or [],
+        "missing_optional": missing_optional or [],
         "total_issues": total_issues,
         "issues_by_severity": {
             "critical": len(issues["critical"]),
