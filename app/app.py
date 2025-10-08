@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 # CONFIGURATION
 # =============================================================================
 st.set_page_config(
-    page_title="Talent Search Platform",
+    page_title="Talent Search Platform: by Sakibul Alam",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed"
