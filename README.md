@@ -85,14 +85,11 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
 
 **1. Parse Resumes & Build Warehouse**
 ```bash
-# Open Jupyter notebook
+# Open Jupyter notebook 
+No 
 jupyter notebook Case_Study.ipynb
 
-# Run cells in order:
-# - Cells 1-5: Setup and parsing functions
-# - Cell 6: Parse all resumes (creates JSON files)
-# - Cell 7: Initialize warehouse database
-# - Cell 8: Ingest parsed data into warehouse
+# No need to run the code, all pipelines are built. Can simply launch the app. 
 ```
 
 **2. Launch Streamlit App**
