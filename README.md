@@ -103,9 +103,9 @@ We use 2 prompts utils/prompts to extract data from the resume.
 - RESUME_PARSER_PROMPT: This extracts all the properties we want from a candidate (experiences, education, skills, email, etc). This gets saved in data/resumes/processed
 - SUMMARY_PROMPT: This is to extract a high level summary given the json the RESUME_PARSER_PROMPT and the resume to help the recruiter have a high level summary of the candidate. In a future iteration, this prompt could be probably be extraneous and we could derive said insights from the ouput of RESUME_PARSER_PROMPT. The output of the summary prompt is aved in data/resumes/summary
 
-#### Data Validation & Quality Scorer
+#### Data Validation & Quality Scoring
 
-- Sometimes AI would extract nulls or put the wrong information in the field. This validation is mainly used for debugging. This is in utils/data_validator & quality_scorer. As resumes scale, we'll need a way to understand which resumes are presenting problems (noticed that resumes with tabular formats were difficult). Potentially resumes with color or pictures could be problematic too. 
+- Sometimes AI would extract nulls or put the wrong information in the field. This validation is mainly used for debugging. This is in utils/data_validator. As resumes scale, we'll need a way to understand which resumes are presenting problems (noticed that resumes with tabular formats were difficult). Potentially resumes with color or pictures could be problematic too. 
 
 Having the validation also helps to have data in a standaridzed way , such as having education , dates, etc standardized so we have filters working accordingly
 
@@ -534,8 +534,7 @@ resume-platform/
 │   ├── parser.py              # Text extraction (PDF/DOCX)
 │   ├── prompts.py             # LLM prompts for parsing and summarization
 │   ├── db.py                  # Database operations and schema
-│   ├── data_validator.py      # Quality validation and completeness scoring
-│   └── quality_scorer.py      # (Legacy) Quality scoring utilities
+│   └── data_validator.py      # Quality validation and completeness scoring
 │
 ├── data/
 │   ├── resumes/

@@ -347,19 +347,13 @@ tab1, tab2 = st.tabs([" Talent Search", " Work in Progress: Matching Jobs to Can
 with tab2:
     st.markdown('<h2 class="section-header"> Job-to-Candidate Matching (Work in Progress)</h2>', unsafe_allow_html=True)
 
-    st.info("""
-    ** Coming Soon: Intelligent Job-to-Candidate Matching**
-
-    We're building an advanced matching system that will revolutionize how you find the perfect candidate for each role!
-    """)
-
     st.markdown("---")
-    st.markdown("###  Select a Job Role")
+    st.markdown("###  Select a Job Role to identify the best Candidate for the Role")
 
     col1, col2 = st.columns([1, 3])
 
     with col1:
-        if st.button(" Data Scientist: HM Sammie", type="primary", use_container_width=True):
+        if st.button(" Data Scientist: Hiring Manager Sammie Kim", type="primary", use_container_width=True):
             st.session_state.selected_job = "Data Scientist: HM Sammie"
 
     if st.session_state.get('selected_job'):
@@ -370,48 +364,24 @@ with tab2:
         st.success("""
         ** Best Candidate Found: Sakibul Alam**
 
-        *Congratulations! Our highly advanced AI algorithm (aka random selection) has determined that
+        *Congratulations! Our highly advanced AI algorithm has determined that
         Sakibul Alam is the perfect match for this role!* 
-
-        **Why?** Well... he's currently the only candidate in our system, so statistically speaking,
-        he's both the best AND worst match! 
         """)
 
         st.markdown("---")
         st.markdown("###  Future Improvements")
 
         st.markdown("""
-        Once we move beyond our "pick the only candidate" algorithm, here's what we're planning:
+        Jokes aside a feature should be users should be able to upload a job description a link to the job posting and we 
+        will present the most relevant candidates to them.
 
-        ####  **Phase 1: Tag Extraction & Matching**
-        - **Skills Extraction**: Parse job descriptions to identify required technical skills (Python, SQL, Machine Learning, etc.)
-        - **Role & Seniority Matching**: Extract role requirements (e.g., "Senior", "Lead", "Manager") and match to candidate experience levels
-        - **Experience Requirements**: Identify years of experience, domain expertise, and industry background from JDs
-        - **Education & Certifications**: Match degree requirements and professional certifications to candidate profiles
+        We can do so by using AI to similarly extract relevant properties from the Job Posting like skills, experience, etc. Then do matching against our
+        candidates.
 
-        ####  **Phase 2: Weighted Scoring System**
-        - Assign weights to different matching criteria (e.g., skills 40%, experience 30%, education 20%, culture fit 10%)
-        - Calculate compatibility scores for each candidate
-        - Rank candidates by overall match percentage
-
-        ####  **Phase 3: Semantic Matching with Embeddings**
-        - Use NLP embeddings (e.g., sentence transformers) to capture semantic similarity between JD text and resume content
-        - Go beyond keyword matching to understand contextual fit
-        - Identify candidates with transferable skills from adjacent domains
-
-        ####  **Phase 4: ML-Powered Recommendations**
-        - Learn from historical hiring decisions to improve matching accuracy
-        - Predict candidate success likelihood based on role requirements
-        - Provide explainable AI insights on why each candidate was matched
-
-        ####  **Bonus Features**
-        - **Gap Analysis**: Show what's missing from top candidates (e.g., "Strong match but lacks AWS certification")
-        - **Diversity Insights**: Ensure balanced candidate pools across different backgrounds
-        - **Market Benchmarking**: Compare candidate qualifications against industry standards
+        We can then do smarter methods like vector embeddings, similarities, feedback looks to imrprove the matching process
         """)
 
         st.markdown("---")
-        st.info(" **Stay tuned!** This is just a preview. Once implemented, you'll be able to upload job descriptions and get instant, intelligent candidate recommendations.")
 
 # =============================================================================
 # TAB 1: TALENT SEARCH
@@ -596,7 +566,7 @@ with tab1:
         search_input = st.text_input(
             "Search across all candidate data",
             value=st.session_state.search_query,
-            placeholder="e.g., 'Goldman Sachs', 'Python machine learning', 'PhD', 'CFA', 'quantitative'...",
+            placeholder="Try searching machine learning, then hit search",
             help="Live search across names, companies, skills, education, certifications, and experience",
             label_visibility="collapsed",
             key="search_input_field"
@@ -852,10 +822,10 @@ with tab1:
 
                         if exp.get('quant_tools_used'):
                             try:
-                                tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used', str) else exp['quant_tools_used']
+                                tools = json.loads(exp['quant_tools_used']) if isinstance(exp['quant_tools_used'], str) else exp['quant_tools_used']
                                 if tools:
                                     st.markdown("**Quant Tools:**")
-                                    tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for tools in tools])
+                                    tools_html = ''.join([f'<span class="badge badge-info">{t}</span>' for t in tools])
                                     st.markdown(tools_html, unsafe_allow_html=True)
                             except:
                                 pass
@@ -994,8 +964,4 @@ with tab1:
 
     # Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown("""
-        <div style="text-align: center; padding: 2rem; color: #6b7280; border-top: 1px solid #e5e7eb;">
-            <p style="margin: 0;"> Talent Search Platform | Built for finding exceptional candidates</p>
-        </div>
-    """, unsafe_allow_html=True)
+
