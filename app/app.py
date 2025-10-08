@@ -345,7 +345,7 @@ tab1, tab2 = st.tabs([" Talent Search", "Matching Jobs to Candidates"])
 # TAB 2: JOB MATCHING (WORK IN PROGRESS)
 # =============================================================================
 with tab2:
-    st.markdown('<h2 class="section-header"> Job-to-Candidate Matching (Work in Progress)</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header"> Job-to-Candidate Matching</h2>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("###  Select a Job Role to identify the best Candidate for the Role")
