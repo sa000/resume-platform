@@ -339,7 +339,7 @@ if 'flagged_candidates' not in st.session_state:
 # =============================================================================
 # TAB NAVIGATION
 # =============================================================================
-tab1, tab2 = st.tabs([" Talent Search", " Work in Progress: Matching Jobs to Candidates"])
+tab1, tab2 = st.tabs([" Talent Search", "Matching Jobs to Candidates"])
 
 # =============================================================================
 # TAB 2: JOB MATCHING (WORK IN PROGRESS)

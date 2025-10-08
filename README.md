@@ -102,6 +102,7 @@ streamlit run app.py
 ```
 
 The app will open at `http://localhost:8501`
+The app is also live at `https://resume-platform-sakib.streamlit.app/`
 
 ---
 
