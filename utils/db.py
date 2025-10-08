@@ -8,8 +8,7 @@ This module provides functions for:
 - Filter value pre-computation for fast filtering
 - Search and retrieval operations
 
-The warehouse uses a normalized star schema with performance
-optimization tables (FTS5 for search, filter_values for fast lookups).
+
 """
 
 import os
