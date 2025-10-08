@@ -558,34 +558,7 @@ with tab1:
     if 'search_query' not in st.session_state:
         st.session_state.search_query = ""
 
-    # Search bar at top of filters
-    st.markdown("####  Smart Search")
-    col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
-
-    with col_search1:
-        search_input = st.text_input(
-            "Search across all candidate data",
-            value=st.session_state.search_query,
-            placeholder="Try searching machine learning, then hit search",
-            help="Live search across names, companies, skills, education, certifications, and experience",
-            label_visibility="collapsed",
-            key="search_input_field"
-        )
-
-    with col_search2:
-        if st.button(" Search", type="primary", width='stretch'):
-            st.session_state.search_query = search_input
-            st.rerun()
-
-    with col_search3:
-        if st.button(" Clear", type="secondary", width='stretch'):
-            st.session_state.search_query = ""
-            st.rerun()
-
-    # Use the session state search query
-    search_query = st.session_state.search_query
-
-    st.markdown("####  Additional Filters")
+    st.markdown("####  Filters")
     col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     with col1:
@@ -620,6 +593,31 @@ with tab1:
     with col8:
         selected_skills = st.multiselect(" Skills", options=all_skills, placeholder="Choose skills...")
 
+    st.markdown("####  Smart Search (Experimental)")
+    col_search1, col_search2, col_search3 = st.columns([5, 1, 1])
+
+    with col_search1:
+        search_input = st.text_input(
+            "Search across all candidate data",
+            value=st.session_state.search_query,
+            placeholder="Try: 'machine learning' or 'Goldman Sachs Python'",
+            help="Experimental: Full-text search across names, companies, skills, education, certifications, and experience descriptions",
+            label_visibility="collapsed",
+            key="search_input_field"
+        )
+
+    with col_search2:
+        if st.button(" Search", type="primary", width='stretch'):
+            st.session_state.search_query = search_input
+            st.rerun()
+
+    with col_search3:
+        if st.button(" Clear", type="secondary", width='stretch'):
+            st.session_state.search_query = ""
+            st.rerun()
+
+    # Use the session state search query
+    search_query = st.session_state.search_query
 
     # Apply search and filters
     if search_query and search_query.strip():
@@ -692,18 +690,19 @@ with tab1:
     else:
         st.info(f" Showing {len(filtered)} matching candidates")
 
-    cols = [
-        "name",
-        "current_title",
-        "current_company",
-        "primary_sector",
-        "investment_approach",
-        "primary_geography",
-        "years_experience",
-    ]
-    display_df = filtered[cols].copy()
-    display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
-    st.dataframe(display_df, width='stretch', hide_index=True)
+    if len(filtered) > 0:
+        cols = [
+            "name",
+            "current_title",
+            "current_company",
+            "primary_sector",
+            "investment_approach",
+            "primary_geography",
+            "years_experience",
+        ]
+        display_df = filtered[cols].copy()
+        display_df.columns = ["Name", "Current Title", "Company", "Sector", "Investment Approach", "Geography", "Years Exp"]
+        st.dataframe(display_df, width='stretch', hide_index=True)
 
     st.markdown('<h2 class="section-header"> Detailed Candidate Profiles</h2>', unsafe_allow_html=True)
     auto_expand = bool(search_query and search_query.strip() and len(filtered) <= 5)

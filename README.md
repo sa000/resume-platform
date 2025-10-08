@@ -146,13 +146,7 @@ resume-platform/
 
 ### Using the Search Platform
 
-#### 1. Smart Search
-**Free-text search** across all candidate data:
-- Example: `machine learning` → Matches "machine learning" via the text of the resume
-- Example: `Goldman Sachs Python` → Finds candidates with GS experience who used Python
-- Example: `DCF healthcare` → Finds candidates who did DCF modeling in healthcare sector
-
-#### 2. Filtering
+#### 1. Filtering
 - **Geographic Market**: Filter by US, Europe, or Asia-Pacific
 - **Investment Approach**: Fundamental vs. Systematic
 - **Sector**: Technology, Healthcare, Financial Services, etc.
@@ -162,17 +156,23 @@ resume-platform/
 - **Experience**: Years of experience (slider)
 - **Skills**: Multi-select (e.g., "Python", "Bloomberg", "DCF")
 
-#### 3. Candidate Profiles
+#### 2. Candidate Profiles
 - Click any result to expand full profile
 - View detailed experience with metrics (Sharpe ratio, alpha, AUM)
 - See complete education history
 - Review all skills and certifications
 - Preview or download original resume
 
-#### 4. Flagging for Roles (Demo)
+#### 3 Flagging for Roles (Demo)
 - Flag candidates for specific job requisitions (Role 1, Role 2, Role 3)
 - Track flagged candidates in the sidebar
 - Review flagged candidates by role in dedicated tabs
+
+#### 4. Smart Search Experimental
+**Free-text search** across all candidate data text data:
+- Example: `machine learning` → Matches "machine learning" via the text of the resume
+- Example: `Goldman Sachs Python` → Finds candidates with GS experience who used Python
+- Example: `DCF healthcare` → Finds candidates who did DCF modeling in healthcare sector
 
 ### Analytics Dashboard
 - **Geographic Distribution**: See where candidates are concentrated
