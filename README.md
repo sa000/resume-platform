@@ -171,8 +171,6 @@ resume-platform/
 #### 4. Smart Search Experimental
 **Free-text search** across all candidate data text data:
 - Example: `machine learning` → Matches "machine learning" via the text of the resume
-- Example: `Goldman Sachs Python` → Finds candidates with GS experience who used Python
-- Example: `DCF healthcare` → Finds candidates who did DCF modeling in healthcare sector
 
 ### Analytics Dashboard
 - **Geographic Distribution**: See where candidates are concentrated

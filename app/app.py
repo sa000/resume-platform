@@ -600,7 +600,7 @@ with tab1:
         search_input = st.text_input(
             "Search across all candidate data",
             value=st.session_state.search_query,
-            placeholder="Try: 'machine learning' or 'Goldman Sachs Python'",
+            placeholder="Try: 'machine learning'",
             help="Experimental: Full-text search across names, companies, skills, education, certifications, and experience descriptions",
             label_visibility="collapsed",
             key="search_input_field"
