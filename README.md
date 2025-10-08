@@ -67,7 +67,7 @@ A web app that allows the team to comb through resumes with relevant filters suc
 
 ```bash
 # Clone repository
-git clone <repo_url>
+git clone https://github.com/sa000/resume-platform.git
 cd resume-platform
 
 # Create virtual environment
